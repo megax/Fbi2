@@ -247,14 +247,7 @@ namespace Schumix.Framework
 			if(db.IsNull())
 			{
 				foreach(var function in Enum.GetNames(typeof(IFunctions)))
-				{
-					if(function == IFunctions.Mantisbt.ToString() || function == IFunctions.Wordpress.ToString() ||
-						function == IFunctions.Svn.ToString() || function == IFunctions.Git.ToString() ||
-						function == IFunctions.Hg.ToString())
-						DManager.Insert("`schumix`(ServerId, ServerName, FunctionName, FunctionStatus)", ServerId, ServerName, function.ToLower(), Off);
-					else
-						DManager.Insert("`schumix`(ServerId, ServerName, FunctionName, FunctionStatus)", ServerId, ServerName, function.ToLower(), On);
-				}
+					DManager.Insert("`schumix`(ServerId, ServerName, FunctionName, FunctionStatus)", ServerId, ServerName, function.ToLower(), On);
 			}
 		}
 
@@ -264,14 +257,7 @@ namespace Schumix.Framework
 			{
 				var db = DManager.QueryFirstRow("SELECT * FROM schumix WHERE ServerId = '{0}' And FunctionName = '{1}'", ServerId, function.ToLower());
 				if(db.IsNull())
-				{
-					if(function == IFunctions.Mantisbt.ToString() || function == IFunctions.Wordpress.ToString() ||
-						function == IFunctions.Svn.ToString() || function == IFunctions.Git.ToString() ||
-						function == IFunctions.Hg.ToString())
-						DManager.Insert("`schumix`(ServerId, ServerName, FunctionName, FunctionStatus)", ServerId, ServerName, function.ToLower(), Off);
-					else
-						DManager.Insert("`schumix`(ServerId, ServerName, FunctionName, FunctionStatus)", ServerId, ServerName, function.ToLower(), On);
-				}
+					DManager.Insert("`schumix`(ServerId, ServerName, FunctionName, FunctionStatus)", ServerId, ServerName, function.ToLower(), On);
 			}
 		}
 	}
