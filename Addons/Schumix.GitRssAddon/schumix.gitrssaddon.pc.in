@@ -1,6 +1,0 @@
-Name: Schumix.GitRssAddon
-Description: Schumix.GitRssAddon
-Version: 3.x
-
-Requires: 
-Libs: -r:@expanded_libdir@/@PACKAGE@/GitRssAddon.dll

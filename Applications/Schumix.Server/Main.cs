@@ -25,7 +25,6 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Diagnostics;
 using System.Globalization;
-using Schumix.Updater;
 using Schumix.Framework;
 using Schumix.Framework.Clean;
 using Schumix.Framework.Client;
@@ -153,7 +152,6 @@ namespace Schumix.Server
 			sCleanManager = new CleanManager(true);
 			sCleanManager.Initialize();
 
-			new Update(Server.Config.ServerConfig.ConfigDirectory);
 			sUtilities.CleanHomeDirectory(true);
 
 			if(sUtilities.GetPlatformType() == PlatformType.Windows)

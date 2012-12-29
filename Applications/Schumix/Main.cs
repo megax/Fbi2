@@ -24,7 +24,6 @@ using System.Threading;
 using System.Diagnostics;
 using System.Globalization;
 using Schumix.Irc;
-using Schumix.Updater;
 using Schumix.Framework;
 using Schumix.Framework.Config;
 using Schumix.Framework.Extensions;
@@ -234,9 +233,6 @@ namespace Schumix
 				sCrashDumper.CreateCrashDump(eventArgs.ExceptionObject);
 				Shutdown("Crash.", true);
 			};
-
-			if(!ServerConfig.Enabled)
-				new Update(SchumixConfig.ConfigDirectory);
 
 			sUtilities.CleanHomeDirectory();
 			new SchumixBot();

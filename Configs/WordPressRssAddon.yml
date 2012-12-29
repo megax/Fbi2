@@ -1,4 +1,0 @@
-# WordPressRssAddon config file (yaml)
-WordPressRssAddon:
-    Rss:
-        QueryTime: 60

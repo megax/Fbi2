@@ -1,4 +1,0 @@
-# GitRssAddon config file (yaml)
-GitRssAddon:
-    Rss:
-        QueryTime: 60

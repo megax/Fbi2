@@ -92,7 +92,6 @@ namespace Schumix
 				});
 
 				Log.Debug("SchumixBot", sLConsole.SchumixBot("Text3"));
-				new ScriptManager(ScriptsConfig.Directory);
 				new Console.Console(eserver);
 			}
 			catch(Exception e)

@@ -10,8 +10,7 @@ ASSEMBLY = ../../Run/Debug/Server.exe
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = exe
 PROJECT_REFERENCES =  \
-	../../Run/Debug/Schumix.Framework.dll \
-	../../Run/Debug/Schumix.Updater.dll
+	../../Run/Debug/Schumix.Framework.dll
 BUILD_DIR = ../../Run/Debug
 
 SERVER_EXE_MDB_SOURCE=../../Run/Debug/Server.exe.mdb
@@ -25,8 +24,6 @@ SCHUMIX_DB3_SOURCE=../../Sql/Schumix.db3
 MYSQL_DATA_DLL_SOURCE=../../Dependencies/MySql.Data.dll
 SYSTEM_DATA_SQLITE_DLL_SOURCE=../../Dependencies/System.Data.SQLite.dll
 SCHUMIX_API_DLL_SOURCE=../../Run/Debug/Schumix.API.dll
-SCHUMIX_UPDATER_DLL_SOURCE=../../Run/Debug/Schumix.Updater.dll
-ICSHARPCODE_SHARPZIPLIB_DLL_SOURCE=../../Dependencies/ICSharpCode.SharpZipLib.dll
 
 endif
 
@@ -37,8 +34,7 @@ ASSEMBLY = ../../Run/Release/Server.exe
 ASSEMBLY_MDB = 
 COMPILE_TARGET = exe
 PROJECT_REFERENCES =  \
-	../../Run/Release/Schumix.Framework.dll \
-	../../Run/Release/Schumix.Updater.dll
+	../../Run/Release/Schumix.Framework.dll
 BUILD_DIR = ../../Run/Release
 
 SERVER_EXE_MDB=
@@ -51,8 +47,6 @@ SCHUMIX_DB3_SOURCE=../../Sql/Schumix.db3
 MYSQL_DATA_DLL_SOURCE=../../Dependencies/MySql.Data.dll
 SYSTEM_DATA_SQLITE_DLL_SOURCE=../../Dependencies/System.Data.SQLite.dll
 SCHUMIX_API_DLL_SOURCE=../../Run/Release/Schumix.API.dll
-SCHUMIX_UPDATER_DLL_SOURCE=../../Run/Release/Schumix.Updater.dll
-ICSHARPCODE_SHARPZIPLIB_DLL_SOURCE=../../Dependencies/ICSharpCode.SharpZipLib.dll
 
 endif
 
@@ -63,8 +57,7 @@ ASSEMBLY = ../../Run/Debug_x64/Server.exe
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = exe
 PROJECT_REFERENCES =  \
-	../../Run/Debug_x64/Schumix.Framework.dll \
-	../../Run/Debug_x64/Schumix.Updater.dll
+	../../Run/Debug_x64/Schumix.Framework.dll
 BUILD_DIR = ../../Run/Debug_x64
 
 SERVER_EXE_MDB_SOURCE=../../Run/Debug_x64/Server.exe.mdb
@@ -78,8 +71,6 @@ SCHUMIX_DB3_SOURCE=../../Sql/Schumix.db3
 MYSQL_DATA_DLL_SOURCE=../../Dependencies/MySql.Data.dll
 SYSTEM_DATA_SQLITE_DLL_SOURCE=../../Dependencies/System.Data.SQLite.dll
 SCHUMIX_API_DLL_SOURCE=../../Run/Debug_x64/Schumix.API.dll
-SCHUMIX_UPDATER_DLL_SOURCE=../../Run/Debug_x64/Schumix.Updater.dll
-ICSHARPCODE_SHARPZIPLIB_DLL_SOURCE=../../Dependencies/ICSharpCode.SharpZipLib.dll
 
 endif
 
@@ -90,8 +81,7 @@ ASSEMBLY = ../../Run/Release_x64/Server.exe
 ASSEMBLY_MDB = 
 COMPILE_TARGET = exe
 PROJECT_REFERENCES =  \
-	../../Run/Release_x64/Schumix.Framework.dll \
-	../../Run/Release_x64/Schumix.Updater.dll
+	../../Run/Release_x64/Schumix.Framework.dll
 BUILD_DIR = ../../Run/Release_x64
 
 SERVER_EXE_MDB=
@@ -104,8 +94,6 @@ SCHUMIX_DB3_SOURCE=../../Sql/Schumix.db3
 MYSQL_DATA_DLL_SOURCE=../../Dependencies/MySql.Data.dll
 SYSTEM_DATA_SQLITE_DLL_SOURCE=../../Dependencies/System.Data.SQLite.dll
 SCHUMIX_API_DLL_SOURCE=../../Run/Release_x64/Schumix.API.dll
-SCHUMIX_UPDATER_DLL_SOURCE=../../Run/Release_x64/Schumix.Updater.dll
-ICSHARPCODE_SHARPZIPLIB_DLL_SOURCE=../../Dependencies/ICSharpCode.SharpZipLib.dll
 
 endif
 
@@ -122,9 +110,7 @@ PROGRAMFILES = \
 	$(SCHUMIX_DB3) \
 	$(MYSQL_DATA_DLL) \
 	$(SYSTEM_DATA_SQLITE_DLL) \
-	$(SCHUMIX_API_DLL) \
-	$(SCHUMIX_UPDATER_DLL) \
-	$(ICSHARPCODE_SHARPZIPLIB_DLL)  
+	$(SCHUMIX_API_DLL)  
 
 BINARIES = \
 	$(SCHUMIX_SERVER)  
@@ -185,8 +171,6 @@ SCHUMIX_DB3 = $(BUILD_DIR)/Schumix.db3
 MYSQL_DATA_DLL = $(BUILD_DIR)/MySql.Data.dll
 SYSTEM_DATA_SQLITE_DLL = $(BUILD_DIR)/System.Data.SQLite.dll
 SCHUMIX_API_DLL = $(BUILD_DIR)/Schumix.API.dll
-SCHUMIX_UPDATER_DLL = $(BUILD_DIR)/Schumix.Updater.dll
-ICSHARPCODE_SHARPZIPLIB_DLL = $(BUILD_DIR)/ICSharpCode.SharpZipLib.dll
 SCHUMIX_SERVER = $(BUILD_DIR)/schumix.server
 
 $(eval $(call emit-deploy-target,MONO_POSIX_DLL))
@@ -196,7 +180,6 @@ $(eval $(call emit-deploy-target,SQLITE3_DLL))
 $(eval $(call emit-deploy-target,SCHUMIX_DB3))
 $(eval $(call emit-deploy-target,MYSQL_DATA_DLL))
 $(eval $(call emit-deploy-target,SYSTEM_DATA_SQLITE_DLL))
-$(eval $(call emit-deploy-target,ICSHARPCODE_SHARPZIPLIB_DLL))
 $(eval $(call emit-deploy-wrapper,SCHUMIX_SERVER,schumix.server,x))
 
 
