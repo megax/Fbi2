@@ -23,27 +23,9 @@ namespace Schumix.API.Functions
 {
 	public enum IFunctions
 	{
-		Greeter,
 		Log,
 		Rejoin,
 		Commands,
-		Reconnect,
-		Autohl,
-		Autokick,
-		Automode,
-		Svn,
-		Hg,
-		Git,
-		Antiflood,
-		Message,
-		Compiler,
-		Gamecommands,
-		Webtitle,
-		Randomkick,
-		Mantisbt,
-		Wordpress,
-		Chatterbot,
-		NameDay,
-		BirthDay
+		Reconnect
 	};
 }

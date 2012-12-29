@@ -22,7 +22,6 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Schumix.Irc.Flood;
 using Schumix.Irc.Commands;
 using Schumix.Framework;
 using Schumix.Framework.Config;
@@ -39,13 +38,11 @@ namespace Schumix.Irc
 		private readonly Utilities sUtilities = Singleton<Utilities>.Instance;
 		private readonly IrcBase sIrcBase = Singleton<IrcBase>.Instance;
 		private readonly SendMessage sSendMessage;
-		private readonly AntiFlood sAntiFlood;
 		private string _servername;
 
 		public ChannelNameList(string ServerName) : base(ServerName)
 		{
 			_servername = ServerName;
-			sAntiFlood = sIrcBase.Networks[ServerName].sAntiFlood;
 			sSendMessage = sIrcBase.Networks[ServerName].sSendMessage;
 		}
 
@@ -165,7 +162,6 @@ namespace Schumix.Irc
 
 				channel.Clear();
 				RandomVhost(Name.ToLower());
-				sAntiFlood.Remove(Name.ToLower());
 			}
 		}
 
@@ -204,7 +200,6 @@ namespace Schumix.Irc
 
 			channel.Clear();
 			RandomVhost(Name.ToLower());
-			sAntiFlood.Remove(Name.ToLower());
 		}
 
 		public bool IsChannelList(string Name)

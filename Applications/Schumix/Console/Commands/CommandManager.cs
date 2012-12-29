@@ -94,7 +94,6 @@ namespace Schumix.Console.Commands
 			RegisterHandler("join",       HandleJoin);
 			RegisterHandler("leave",      HandleLeave);
 			RegisterHandler("reload",     HandleReload);
-			RegisterHandler("ignore",     HandleIgnore);
 			RegisterHandler("plugin",     HandlePlugin);
 			RegisterHandler("quit",       HandleQuit);
 

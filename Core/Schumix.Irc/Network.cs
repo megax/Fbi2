@@ -142,9 +142,6 @@ namespace Schumix.Irc
 			InitializeCommandHandler();
 			InitializeCommandMgr();
 			Task.Factory.StartNew(() => sChannelInfo.ChannelList());
-			sIgnoreNickName.AddConfig();
-			sIgnoreChannel.AddConfig();
-			sIgnoreAddon.AddConfig();
 		}
 
 		public void InitializeOpcodesAndPing()
@@ -551,9 +548,6 @@ namespace Schumix.Irc
 
 			try
 			{
-				sIgnoreNickName.RemoveConfig();
-				sIgnoreChannel.RemoveConfig();
-				sIgnoreAddon.RemoveConfig();
 				DisConnect();
 			}
 			catch(Exception e)

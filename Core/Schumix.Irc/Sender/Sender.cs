@@ -18,7 +18,6 @@
  */
 
 using System;
-using Schumix.Irc.Ignore;
 using Schumix.Framework;
 using Schumix.Framework.Config;
 using Schumix.Framework.Extensions;
@@ -32,7 +31,6 @@ namespace Schumix.Irc
 		private readonly LocalizationConsole sLConsole = Singleton<LocalizationConsole>.Instance;
 		private readonly IrcBase sIrcBase = Singleton<IrcBase>.Instance;
 		private readonly object WriteLock = new object();
-		private readonly IgnoreChannel sIgnoreChannel;
 		private readonly SendMessage sSendMessage;
 		private string _servername;
 
@@ -40,7 +38,6 @@ namespace Schumix.Irc
 		{
 			_servername = ServerName;
 			sSendMessage = sIrcBase.Networks[ServerName].sSendMessage;
-			sIgnoreChannel = sIrcBase.Networks[ServerName].sIgnoreChannel;
 		}
 
 		public void NameInfo(string nick, string user, string userinfo)
@@ -72,8 +69,7 @@ namespace Schumix.Irc
 		{
 			lock(WriteLock)
 			{
-				if(!sIgnoreChannel.IsIgnore(channel))
-					sSendMessage.WriteLine("JOIN {0}", channel);
+				sSendMessage.WriteLine("JOIN {0}", channel);
 			}
 		}
 
@@ -81,8 +77,7 @@ namespace Schumix.Irc
 		{
 			lock(WriteLock)
 			{
-				if(!sIgnoreChannel.IsIgnore(channel))
-					sSendMessage.WriteLine("JOIN {0} {1}", channel, pass);
+				sSendMessage.WriteLine("JOIN {0} {1}", channel, pass);
 			}
 		}
 

@@ -50,42 +50,18 @@ namespace Schumix.Irc.Commands
 		{
 			Log.Notice("CommandManager", sLConsole.CommandManager("Text"));
 			CreateMappings();
-			sAntiFlood.Start();
 		}
 
 		private void CreateMappings(bool Reload = false)
 		{
 			// Public
-			SchumixRegisterHandler("xbot",         HandleXbot);
-			SchumixRegisterHandler("info",         HandleInfo);
-			SchumixRegisterHandler("help",         HandleHelp);
-			SchumixRegisterHandler("time",         HandleTime);
-			SchumixRegisterHandler("date",         HandleDate);
-			SchumixRegisterHandler("irc",          HandleIrc);
-			SchumixRegisterHandler("whois",        HandleWhois);
-			SchumixRegisterHandler("warning",      HandleWarning);
-			SchumixRegisterHandler("google",       HandleGoogle);
-			SchumixRegisterHandler("translate",    HandleTranslate);
-			SchumixRegisterHandler("online",       HandleOnline);
 
 			// Half Operator
 			SchumixRegisterHandler("admin",        HandleAdmin,    CommandPermission.HalfOperator);
-			SchumixRegisterHandler("colors",       HandleColors,   CommandPermission.HalfOperator);
-			SchumixRegisterHandler("nick",         HandleNick,     CommandPermission.HalfOperator);
-			SchumixRegisterHandler("join",         HandleJoin,     CommandPermission.HalfOperator);
-			SchumixRegisterHandler("leave",        HandleLeave,    CommandPermission.HalfOperator);
 
 			// Operator
-			SchumixRegisterHandler("function",     HandleFunction, CommandPermission.Operator);
-			SchumixRegisterHandler("channel",      HandleChannel,  CommandPermission.Operator);
-			SchumixRegisterHandler("kick",         HandleKick,     CommandPermission.Operator);
-			SchumixRegisterHandler("mode",         HandleMode,     CommandPermission.Operator);
-			SchumixRegisterHandler("ignore",       HandleIgnore,   CommandPermission.Operator);
 
 			// Admin
-			SchumixRegisterHandler("plugin",       HandlePlugin,   CommandPermission.Administrator);
-			SchumixRegisterHandler("reload",       HandleReload,   CommandPermission.Administrator);
-			SchumixRegisterHandler("quit",         HandleQuit,     CommandPermission.Administrator);
 
 			var tasm = Assembly.GetExecutingAssembly();
 			var asms = sAddonManager.Addons[_servername].Assemblies.ToDictionary(v => v.Key, v => v.Value);
@@ -117,36 +93,13 @@ namespace Schumix.Irc.Commands
 		private void DeleteMappings(bool Reload = false)
 		{
 			// Public
-			SchumixRemoveHandler("xbot",          HandleXbot);
-			SchumixRemoveHandler("info",          HandleInfo);
-			SchumixRemoveHandler("help",          HandleHelp);
-			SchumixRemoveHandler("time",          HandleTime);
-			SchumixRemoveHandler("date",          HandleDate);
-			SchumixRemoveHandler("irc",           HandleIrc);
-			SchumixRemoveHandler("whois",         HandleWhois);
-			SchumixRemoveHandler("warning",       HandleWarning);
-			SchumixRemoveHandler("google",        HandleGoogle);
-			SchumixRemoveHandler("translate",     HandleTranslate);
-			SchumixRemoveHandler("online",        HandleOnline);
 
 			// Half Operator
 			SchumixRemoveHandler("admin",         HandleAdmin);
-			SchumixRemoveHandler("colors",        HandleColors);
-			SchumixRemoveHandler("nick",          HandleNick);
-			SchumixRemoveHandler("join",          HandleJoin);
-			SchumixRemoveHandler("leave",         HandleLeave);
 
 			// Operator
-			SchumixRemoveHandler("function",      HandleFunction);
-			SchumixRemoveHandler("channel",       HandleChannel);
-			SchumixRemoveHandler("kick",          HandleKick);
-			SchumixRemoveHandler("mode",          HandleMode);
-			SchumixRemoveHandler("ignore",        HandleIgnore);
 
 			// Admin
-			SchumixRemoveHandler("plugin",        HandlePlugin);
-			SchumixRemoveHandler("reload",        HandleReload);
-			SchumixRemoveHandler("quit",          HandleQuit);
 
 			if(SchumixBase.ExitStatus)
 				CommandMethodMap.Clear();
@@ -176,9 +129,6 @@ namespace Schumix.Irc.Commands
 
 		public void SchumixRegisterHandler(string code, CommandDelegate method, CommandPermission permission = CommandPermission.Normal)
 		{
-			if(sIgnoreCommand.IsIgnore(code))
-			   return;
-
 			if(CommandMethodMap.ContainsKey(code.ToLower()))
 				CommandMethodMap[code.ToLower()].Method += method;
 			else
@@ -206,14 +156,6 @@ namespace Schumix.Irc.Commands
 		{
 			try
 			{
-				sAntiFlood.FloodCommand(sIRCMessage);
-
-				if(sIgnoreCommand.IsIgnore(handler))
-					return;
-
-				if(sAntiFlood.Ignore(sIRCMessage))
-					return;
-
 				if(CommandMethodMap.ContainsKey(handler))
 					CommandMethodMap[handler].Method.Invoke(sIRCMessage);
 			}

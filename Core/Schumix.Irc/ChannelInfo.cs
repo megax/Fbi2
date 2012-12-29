@@ -22,7 +22,6 @@ using System.Data;
 using System.Collections.Generic;
 using Schumix.API;
 using Schumix.API.Functions;
-using Schumix.Irc.Ignore;
 using Schumix.Framework;
 using Schumix.Framework.Config;
 using Schumix.Framework.Extensions;
@@ -37,7 +36,6 @@ namespace Schumix.Irc
 		private readonly LocalizationConsole sLConsole = Singleton<LocalizationConsole>.Instance;
 		private readonly IrcBase sIrcBase = Singleton<IrcBase>.Instance;
 		private readonly object WriteLock = new object();
-		private readonly IgnoreChannel sIgnoreChannel;
 		private readonly Sender sSender;
 		private string _servername;
 
@@ -55,7 +53,6 @@ namespace Schumix.Irc
 		{
 			_servername = ServerName;
 			sSender = sIrcBase.Networks[ServerName].sSender;
-			sIgnoreChannel = sIrcBase.Networks[ServerName].sIgnoreChannel;
 		}
 
 		public void ChannelList()
@@ -311,11 +308,7 @@ namespace Schumix.Irc
 			foreach(var channel in _ChannelList)
 			{
 				sSender.Join(channel.Key, channel.Value.Trim());
-
-				if(sIgnoreChannel.IsIgnore(channel.Key))
-					error = true;
-				else
-					SchumixBase.DManager.Update("channels", "Enabled = 'true', Error = ''", string.Format("Channel = '{0}' And ServerName = '{1}'", channel.Key, _servername));
+				SchumixBase.DManager.Update("channels", "Enabled = 'true', Error = ''", string.Format("Channel = '{0}' And ServerName = '{1}'", channel.Key, _servername));
 			}
 
 			ChannelFunctionsReload();

@@ -75,8 +75,6 @@
     <Compile Include="Ctcp\CtcpUtil.cs" />
     <Compile Include="ChannelNameList.cs" />
     <Compile Include="ConnectionType.cs" />
-    <Compile Include="Flood\AntiFlood.cs" />
-    <Compile Include="Flood\CommandFlood.cs" />
     <Compile Include="IrcColors.cs" />
     <Compile Include="Commands\SchumixCommandAttribute.cs" />
     <Compile Include="Commands\AdminFlag.cs" />
@@ -86,14 +84,6 @@
     <Compile Include="IrcCommandAttribute.cs" />
     <Compile Include="Sender\Sender.cs" />
     <Compile Include="Sender\SendMessage.cs" />
-    <Compile Include="Ignore\IgnoreNickName.cs" />
-    <Compile Include="Ignore\IgnoreIrcCommand.cs" />
-    <Compile Include="Ignore\IgnoreCommand.cs" />
-    <Compile Include="Ignore\IgnoreChannel.cs" />
-    <Compile Include="Ignore\IgnoreAddon.cs" />
-    <Compile Include="Commands\GoogleWebSearch\GoogleWebResult.cs" />
-    <Compile Include="Commands\GoogleWebSearch\GoogleWebResponseData.cs" />
-    <Compile Include="Commands\GoogleWebSearch\GoogleWebResultSet.cs" />
     <Compile Include="IrcBase.cs" />
     <Compile Include="Commands\Whois.cs" />
   </ItemGroup>
@@ -109,9 +99,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Flood\" />
     <Folder Include="Sender\" />
-    <Folder Include="Ignore\" />
-    <Folder Include="Commands\GoogleWebSearch\" />
   </ItemGroup>
 </Project>

@@ -23,21 +23,8 @@ namespace Schumix.API.Functions
 {
 	public enum IChannelFunctions
 	{
-		Greeter,
 		Log,
 		Rejoin,
-		Commands,
-		Autohl,
-		Autokick,
-		Automode,
-		Antiflood,
-		Message,
-		Compiler,
-		Gamecommands,
-		Webtitle,
-		Randomkick,
-		Chatterbot,
-		NameDay,
-		BirthDay
+		Commands
 	};
 }

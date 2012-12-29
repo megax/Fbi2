@@ -53,7 +53,6 @@ namespace Schumix.Irc
 					nw.SetConnectionType(ConnectionType.Ssl);
 
 				_networks.Add(ServerName, nw);
-				_networks[ServerName.ToLower()].InitializeIgnoreCommand();
 			}
 		}
 
