@@ -138,8 +138,6 @@ FILES = \
 	Ctcp/CtcpUtil.cs \
 	ChannelNameList.cs \
 	ConnectionType.cs \
-	Flood/AntiFlood.cs \
-	Flood/CommandFlood.cs \
 	IrcColors.cs \
 	Commands/SchumixCommandAttribute.cs \
 	Commands/AdminFlag.cs \
@@ -149,14 +147,6 @@ FILES = \
 	IrcCommandAttribute.cs \
 	Sender/Sender.cs \
 	Sender/SendMessage.cs \
-	Ignore/IgnoreNickName.cs \
-	Ignore/IgnoreIrcCommand.cs \
-	Ignore/IgnoreCommand.cs \
-	Ignore/IgnoreChannel.cs \
-	Ignore/IgnoreAddon.cs \
-	Commands/GoogleWebSearch/GoogleWebResult.cs \
-	Commands/GoogleWebSearch/GoogleWebResponseData.cs \
-	Commands/GoogleWebSearch/GoogleWebResultSet.cs \
 	IrcBase.cs \
 	Commands/Whois.cs 
 
@@ -165,10 +155,7 @@ DATA_FILES =
 RESOURCES = 
 
 EXTRAS = \
-	Flood \
 	Sender \
-	Ignore \
-	Commands/GoogleWebSearch \
 	schumix.irc.pc.in 
 
 REFERENCES =  \
