@@ -135,6 +135,34 @@
     <Compile Include="Clean\CleanDatabase.cs" />
     <Compile Include="Config\CleanConfig.cs" />
     <Compile Include="LogType.cs" />
+    <Compile Include="Commands\AdminCommandHandler.cs" />
+    <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Commands\CommandManager.cs" />
+    <Compile Include="Commands\OperatorCommandHandler.cs" />
+    <Compile Include="Commands\PublicCommandHandler.cs" />
+    <Compile Include="Commands\CommandInfo.cs" />
+    <Compile Include="Commands\HalfOperatorCommandHandler.cs" />
+    <Compile Include="Commands\SchumixCommandAttribute.cs" />
+    <Compile Include="Commands\AdminFlag.cs" />
+    <Compile Include="Commands\CommandPermission.cs" />
+    <Compile Include="Commands\CommandMethod.cs" />
+    <Compile Include="Commands\Whois.cs" />
+    <Compile Include="Ctcp\CtcpSender.cs" />
+    <Compile Include="Ctcp\CtcpUtil.cs" />
+    <Compile Include="Sender\Sender.cs" />
+    <Compile Include="Sender\SendMessage.cs" />
+    <Compile Include="ChannelInfo.cs" />
+    <Compile Include="ChannelNameList.cs" />
+    <Compile Include="ConnectionType.cs" />
+    <Compile Include="IrcBase.cs" />
+    <Compile Include="IrcColors.cs" />
+    <Compile Include="IrcCommandAttribute.cs" />
+    <Compile Include="IrcMethod.cs" />
+    <Compile Include="MessageHandler.cs" />
+    <Compile Include="Network.cs" />
+    <Compile Include="NickInfo.cs" />
+    <Compile Include="PublicMessageHandler.cs" />
+    <Compile Include="ReplyCode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -148,12 +176,12 @@
     <None Include="..\..\Dependencies\sqlite3.dll">
       <Link>sqlite3.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Gettext-ScanForTranslations>false</Gettext-ScanForTranslations>
+      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
     </None>
     <None Include="..\..\Sql\Schumix.db3">
       <Link>Schumix.db3</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Gettext-ScanForTranslations>false</Gettext-ScanForTranslations>
+      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
     </None>
   </ItemGroup>
   <ItemGroup>

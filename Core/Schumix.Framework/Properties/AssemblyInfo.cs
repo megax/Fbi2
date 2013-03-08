@@ -26,7 +26,7 @@ using Schumix.Framework.Config;
 // Information about this assembly is defined by the following attributes. 
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle("Schumix.Framework")]
+[assembly: AssemblyTitle("Schumix.Irc")]
 [assembly: AssemblyDescription(Consts.SchumixDescription)]
 [assembly: AssemblyConfiguration(Consts.SchumixConfiguration)]
 [assembly: AssemblyCompany(Consts.SchumixCompany)]
