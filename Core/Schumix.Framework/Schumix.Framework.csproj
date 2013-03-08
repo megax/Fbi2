@@ -114,7 +114,6 @@
     <Compile Include="Config\YamlConfig.cs" />
     <Compile Include="Network\ClientPacketHandlerDelegate.cs" />
     <Compile Include="Config\CrashConfig.cs" />
-    <Compile Include="JsonHelper.cs" />
     <Compile Include="Config\ShutdownConfig.cs" />
     <Compile Include="Database\Cache\CacheDB.cs" />
     <Compile Include="Database\Cache\LocalizedCommand.cs" />
@@ -147,7 +146,6 @@
     <Compile Include="ChannelNameList.cs" />
     <Compile Include="ConnectionType.cs" />
     <Compile Include="IrcBase.cs" />
-    <Compile Include="IrcColors.cs" />
     <Compile Include="IrcCommandAttribute.cs" />
     <Compile Include="IrcMethod.cs" />
     <Compile Include="MessageHandler.cs" />
