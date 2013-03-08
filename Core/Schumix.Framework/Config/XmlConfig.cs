@@ -153,12 +153,6 @@ namespace Schumix.Framework.Config
 
 			new AddonsConfig(Enabled, Ignore, sUtilities.GetSpecialDirectory(Directory));
 
-			bool Lua = !xmldoc.SelectSingleNode("Schumix/Scripts/Lua").IsNull() ? Convert.ToBoolean(xmldoc.SelectSingleNode("Schumix/Scripts/Lua").InnerText) : d_scriptsluaenabled;
-			bool Python = !xmldoc.SelectSingleNode("Schumix/Scripts/Python").IsNull() ? Convert.ToBoolean(xmldoc.SelectSingleNode("Schumix/Scripts/Python").InnerText) : d_scriptspythonenabled;
-			Directory = !xmldoc.SelectSingleNode("Schumix/Scripts/Directory").IsNull() ? xmldoc.SelectSingleNode("Schumix/Scripts/Directory").InnerText : d_scriptsdirectory;
-
-			new ScriptsConfig(Lua, Python, sUtilities.GetSpecialDirectory(Directory));
-
 			Directory = !xmldoc.SelectSingleNode("Schumix/Crash/Directory").IsNull() ? xmldoc.SelectSingleNode("Schumix/Crash/Directory").InnerText : d_crashdirectory;
 
 			new CrashConfig(sUtilities.GetSpecialDirectory(Directory));
@@ -167,21 +161,9 @@ namespace Schumix.Framework.Config
 
 			new LocalizationConfig(Locale);
 
-			Enabled = !xmldoc.SelectSingleNode("Schumix/Update/Enabled").IsNull() ? Convert.ToBoolean(xmldoc.SelectSingleNode("Schumix/Update/Enabled").InnerText) : d_updateenabled;
-			string Version = !xmldoc.SelectSingleNode("Schumix/Update/Version").IsNull() ? xmldoc.SelectSingleNode("Schumix/Update/Version").InnerText : d_updateversion;
-			string Branch = !xmldoc.SelectSingleNode("Schumix/Update/Branch").IsNull() ? xmldoc.SelectSingleNode("Schumix/Update/Branch").InnerText : d_updatebranch;
-			string WebPage = !xmldoc.SelectSingleNode("Schumix/Update/WebPage").IsNull() ? xmldoc.SelectSingleNode("Schumix/Update/WebPage").InnerText : d_updatewebpage;
-
-			new UpdateConfig(Enabled, Version.ToLower(), Branch, WebPage);
-
 			int MaxMemory = !xmldoc.SelectSingleNode("Schumix/Shutdown/MaxMemory").IsNull() ? Convert.ToInt32(xmldoc.SelectSingleNode("Schumix/Shutdown/MaxMemory").InnerText) : d_shutdownmaxmemory;
 
 			new ShutdownConfig(MaxMemory);
-
-			int Seconds = !xmldoc.SelectSingleNode("Schumix/Flooding/Seconds").IsNull() ? Convert.ToInt32(xmldoc.SelectSingleNode("Schumix/Flooding/Seconds").InnerText) : d_floodingseconds;
-			int NumberOfCommands = !xmldoc.SelectSingleNode("Schumix/Flooding/NumberOfCommands").IsNull() ? Convert.ToInt32(xmldoc.SelectSingleNode("Schumix/Flooding/NumberOfCommands").InnerText) : d_floodingnumberofcommands;
-
-			new FloodingConfig(Seconds, NumberOfCommands);
 
 			bool Config = !xmldoc.SelectSingleNode("Schumix/Clean/Config").IsNull() ? Convert.ToBoolean(xmldoc.SelectSingleNode("Schumix/Clean/Config").InnerText) : d_cleanconfig;
 			bool Database2 = !xmldoc.SelectSingleNode("Schumix/Clean/Database").IsNull() ? Convert.ToBoolean(xmldoc.SelectSingleNode("Schumix/Clean/Database").InnerText) : d_cleandatabase;
@@ -405,15 +387,6 @@ namespace Schumix.Framework.Config
 						// </Plugins>
 						w.WriteEndElement();
 
-						// <Scripts>
-						w.WriteStartElement("Scripts");
-						w.WriteElementString("Lua",              (!xmldoc.SelectSingleNode("Schumix/Scripts/Lua").IsNull() ? xmldoc.SelectSingleNode("Schumix/Scripts/Lua").InnerText : d_scriptsluaenabled.ToString()));
-						w.WriteElementString("Python",           (!xmldoc.SelectSingleNode("Schumix/Scripts/Python").IsNull() ? xmldoc.SelectSingleNode("Schumix/Scripts/Python").InnerText : d_scriptspythonenabled.ToString()));
-						w.WriteElementString("Directory",        (!xmldoc.SelectSingleNode("Schumix/Scripts/Directory").IsNull() ? xmldoc.SelectSingleNode("Schumix/Scripts/Directory").InnerText : d_scriptsdirectory));
-
-						// </Scripts>
-						w.WriteEndElement();
-
 						// <Crash>
 						w.WriteStartElement("Crash");
 						w.WriteElementString("Directory",        (!xmldoc.SelectSingleNode("Schumix/Crash/Directory").IsNull() ? xmldoc.SelectSingleNode("Schumix/Crash/Directory").InnerText : d_crashdirectory));
@@ -428,29 +401,11 @@ namespace Schumix.Framework.Config
 						// </Localization>
 						w.WriteEndElement();
 
-						// <Update>
-						w.WriteStartElement("Update");
-						w.WriteElementString("Enabled",          (!xmldoc.SelectSingleNode("Schumix/Update/Enabled").IsNull() ? xmldoc.SelectSingleNode("Schumix/Update/Enabled").InnerText : d_updateenabled.ToString()));
-						w.WriteElementString("Version",          (!xmldoc.SelectSingleNode("Schumix/Update/Version").IsNull() ? xmldoc.SelectSingleNode("Schumix/Update/Version").InnerText : d_updateversion));
-						w.WriteElementString("Branch",           (!xmldoc.SelectSingleNode("Schumix/Update/Branch").IsNull() ? xmldoc.SelectSingleNode("Schumix/Update/Branch").InnerText : d_updatebranch));
-						w.WriteElementString("WebPage",          (!xmldoc.SelectSingleNode("Schumix/Update/WebPage").IsNull() ? xmldoc.SelectSingleNode("Schumix/Update/WebPage").InnerText : d_updatewebpage));
-
-						// </Update>
-						w.WriteEndElement();
-
 						// <Shutdown>
 						w.WriteStartElement("Shutdown");
 						w.WriteElementString("MaxMemory",        (!xmldoc.SelectSingleNode("Schumix/Shutdown/MaxMemory").IsNull() ? xmldoc.SelectSingleNode("Schumix/Shutdown/MaxMemory").InnerText : d_shutdownmaxmemory.ToString()));
 
 						// </Shutdown>
-						w.WriteEndElement();
-
-						// <Flooding>
-						w.WriteStartElement("Flooding");
-						w.WriteElementString("Seconds",          (!xmldoc.SelectSingleNode("Schumix/Flooding/Seconds").IsNull() ? xmldoc.SelectSingleNode("Schumix/Flooding/Seconds").InnerText : d_floodingseconds.ToString()));
-						w.WriteElementString("NumberOfCommands", (!xmldoc.SelectSingleNode("Schumix/Flooding/NumberOfCommands").IsNull() ? xmldoc.SelectSingleNode("Schumix/Flooding/NumberOfCommands").InnerText : d_floodingnumberofcommands.ToString()));
-
-						// </Flooding>
 						w.WriteEndElement();
 
 						// <Clean>

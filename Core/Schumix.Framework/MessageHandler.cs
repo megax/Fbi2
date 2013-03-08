@@ -333,64 +333,6 @@ namespace Schumix.Irc
 			ChannelPrivmsg = sNickInfo.NickStorage;
 		}
 
-		/// <summary>
-		///     Kigyűjti éppen hol van fent a nick.
-		/// </summary>
-		protected void HandleMWhois(IRCMessage sIRCMessage)
-		{
-			if(sIRCMessage.Info.Length < 5)
-				return;
-
-			string nick = sIRCMessage.Info[3].ToLower();
-
-			if(WhoisList.ContainsKey(nick))
-			{
-				WhoisList[nick].Online = true;
-				WhoisList[nick].Message += SchumixBase.Space + sIRCMessage.Info.SplitToString(4, SchumixBase.Space).Remove(0, 1, SchumixBase.Colon);
-			}
-		}
-
-		protected void HandleWhoisServer(IRCMessage sIRCMessage)
-		{
-			if(sIRCMessage.Info.Length < 4)
-				return;
-
-			string nick = sIRCMessage.Info[3].ToLower();
-
-			if(WhoisList.ContainsKey(nick))
-				WhoisList[nick].Online = true;
-		}
-
-		protected void HandleEndOfWhois(IRCMessage sIRCMessage)
-		{
-			string nick = sIRCMessage.Info[3].ToLower();
-
-			if(WhoisList.ContainsKey(nick))
-			{
-				var text = sLManager.GetCommandTexts("whois", WhoisList[nick].Channel, sIRCMessage.ServerName);
-				if(text.Length < 3)
-				{
-					sSendMessage.SendChatMessage(sIRCMessage.MessageType, WhoisList[nick].Channel, sLConsole.Translations("NoFound2", sLManager.GetChannelLocalization(WhoisList[nick].Channel, sIRCMessage.ServerName)));
-					return;
-				}
-
-				if(WhoisList[nick].Online)
-				{
-					if(WhoisList[nick].Message != string.Empty)
-						sSendMessage.SendChatMessage(sIRCMessage.MessageType, WhoisList[nick].Channel, text[0], WhoisList[nick].Message.Remove(0, 1, SchumixBase.Space));
-					else
-						sSendMessage.SendChatMessage(sIRCMessage.MessageType, WhoisList[nick].Channel, text[2]); 
-				}
-				else
-					sSendMessage.SendChatMessage(sIRCMessage.MessageType, WhoisList[nick].Channel, text[1]);
-
-				Monitor.Exit(WhoisList[nick].Lock);
-
-				if(WhoisList.ContainsKey(nick))
-					WhoisList.Remove(nick);
-			}
-		}
-
 		protected void HandleIrcJoin(IRCMessage sIRCMessage)
 		{
 			sIRCMessage.Channel = sIRCMessage.Channel.Remove(0, 1, SchumixBase.Colon);

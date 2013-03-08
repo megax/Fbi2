@@ -70,13 +70,6 @@ namespace Schumix.Server.Config
 
 			new LocalizationConfig(Locale);
 
-			bool Enabled = !xmldoc.SelectSingleNode("Server/Update/Enabled").IsNull() ? Convert.ToBoolean(xmldoc.SelectSingleNode("Server/Update/Enabled").InnerText) : d_updateenabled;
-			string Version = !xmldoc.SelectSingleNode("Server/Update/Version").IsNull() ? xmldoc.SelectSingleNode("Server/Update/Version").InnerText : d_updateversion;
-			string Branch = !xmldoc.SelectSingleNode("Server/Update/Branch").IsNull() ? xmldoc.SelectSingleNode("Server/Update/Branch").InnerText : d_updatebranch;
-			string WebPage = !xmldoc.SelectSingleNode("Server/Update/WebPage").IsNull() ? xmldoc.SelectSingleNode("Server/Update/WebPage").InnerText : d_updatewebpage;
-
-			new Framework.Config.UpdateConfig(Enabled, Version.ToLower(), Branch, WebPage);
-
 			int MaxMemory = !xmldoc.SelectSingleNode("Server/Shutdown/MaxMemory").IsNull() ? Convert.ToInt32(xmldoc.SelectSingleNode("Server/Shutdown/MaxMemory").InnerText) : d_shutdownmaxmemory;
 
 			new Framework.Config.ShutdownConfig(MaxMemory);
@@ -190,16 +183,6 @@ namespace Schumix.Server.Config
 						w.WriteElementString("Locale",          (!xmldoc.SelectSingleNode("Server/Localization/Locale").IsNull() ? xmldoc.SelectSingleNode("Server/Localization/Locale").InnerText : d_locale));
 
 						// </Localization>
-						w.WriteEndElement();
-
-						// <Update>
-						w.WriteStartElement("Update");
-						w.WriteElementString("Enabled",          (!xmldoc.SelectSingleNode("Server/Update/Enabled").IsNull() ? xmldoc.SelectSingleNode("Server/Update/Enabled").InnerText : d_updateenabled.ToString()));
-						w.WriteElementString("Version",          (!xmldoc.SelectSingleNode("Server/Update/Version").IsNull() ? xmldoc.SelectSingleNode("Server/Update/Version").InnerText : d_updateversion));
-						w.WriteElementString("Branch",           (!xmldoc.SelectSingleNode("Server/Update/Branch").IsNull() ? xmldoc.SelectSingleNode("Server/Update/Branch").InnerText : d_updatebranch));
-						w.WriteElementString("WebPage",          (!xmldoc.SelectSingleNode("Server/Update/WebPage").IsNull() ? xmldoc.SelectSingleNode("Server/Update/WebPage").InnerText : d_updatewebpage));
-
-						// </Update>
 						w.WriteEndElement();
 
 						// <Shutdown>

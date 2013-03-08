@@ -33,10 +33,6 @@ namespace Schumix.Server.Config
 		protected const string d_password                = "schumix";
 		protected const string d_crashdirectory          = "Dumps";
 		protected const string d_locale                  = "enUS";
-		protected const bool d_updateenabled             = false;
-		protected const string d_updateversion           = "stable";
-		protected const string d_updatebranch            = "master";
-		protected const string d_updatewebpage           = "https://github.com/Schumix/Schumix2";
 		protected const int d_shutdownmaxmemory          = 100;
 		protected const bool d_schumixsenabled           = false;
 		protected const int d_schumixsnumber             = 1;

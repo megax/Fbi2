@@ -53,24 +53,12 @@ Schumix:
         Enabled: True
         Ignore: MantisBTRssAddon,SvnRssAddon,GitRssAddon,HgRssAddon,WordPressRssAddon,TestAddon
         Directory: Addons
-    Scripts:
-        Lua: False
-        Python: False
-        Directory: Scripts
     Crash:
         Directory: Dumps
     Localization:
         Locale: enUS
-    Update:
-        Enabled: False
-        Version: stable
-        Branch: master
-        WebPage: https://github.com/Schumix/Schumix2
     Shutdown:
         MaxMemory: 100
-    Flooding:
-        Seconds: 4
-        NumberOfCommands: 2
     Clean:
         Config: False
         Database: False

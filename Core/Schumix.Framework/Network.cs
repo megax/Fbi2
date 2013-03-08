@@ -170,9 +170,6 @@ namespace Schumix.Irc
 			IrcRegisterHandler("NOTICE",                       HandleNotice);
 			IrcRegisterHandler(ReplyCode.ERR_BANNEDFROMCHAN,   HandleChannelBan);
 			IrcRegisterHandler(ReplyCode.ERR_BADCHANNELKEY,    HandleNoChannelPassword);
-			IrcRegisterHandler(ReplyCode.RPL_WHOISCHANNELS,    HandleMWhois);
-			IrcRegisterHandler(ReplyCode.RPL_WHOISSERVER,      HandleWhoisServer);
-			IrcRegisterHandler(ReplyCode.RPL_ENDOFWHOIS,       HandleEndOfWhois);
 			IrcRegisterHandler(ReplyCode.ERR_UNKNOWNCOMMAND,   HandleUnknownCommand);
 			IrcRegisterHandler(ReplyCode.ERR_NICKNAMEINUSE,    HandleNickError);
 			IrcRegisterHandler(439,                            HandleWaitingForConnection);

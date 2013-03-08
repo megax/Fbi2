@@ -34,7 +34,6 @@ namespace Schumix.Irc.Commands
 	{
 		protected readonly LocalizationConsole sLConsole = Singleton<LocalizationConsole>.Instance;
 		protected readonly LocalizationManager sLManager = Singleton<LocalizationManager>.Instance;
-		protected readonly Dictionary<string, Whois> WhoisList = new Dictionary<string, Whois>();
 		protected readonly AddonManager sAddonManager = Singleton<AddonManager>.Instance;
 		protected readonly Utilities sUtilities = Singleton<Utilities>.Instance;
 		protected readonly IrcBase sIrcBase = Singleton<IrcBase>.Instance;

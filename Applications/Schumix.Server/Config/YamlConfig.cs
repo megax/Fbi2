@@ -57,7 +57,6 @@ namespace Schumix.Server.Config
 			ServerMap((!servermap.IsNull() && servermap.ContainsKey("Server")) ? ((YamlMappingNode)servermap["Server".ToYamlNode()]).Children : NullYMap);
 			CrashMap((!servermap.IsNull() && servermap.ContainsKey("Crash")) ? ((YamlMappingNode)servermap["Crash".ToYamlNode()]).Children : NullYMap);
 			LocalizationMap((!servermap.IsNull() && servermap.ContainsKey("Localization")) ? ((YamlMappingNode)servermap["Localization".ToYamlNode()]).Children : NullYMap);
-			UpdateMap((!servermap.IsNull() && servermap.ContainsKey("Update")) ? ((YamlMappingNode)servermap["Update".ToYamlNode()]).Children : NullYMap);
 			ShutdownMap((!servermap.IsNull() && servermap.ContainsKey("Shutdown")) ? ((YamlMappingNode)servermap["Shutdown".ToYamlNode()]).Children : NullYMap);
 			CleanMap((!servermap.IsNull() && servermap.ContainsKey("Clean")) ? ((YamlMappingNode)servermap["Clean".ToYamlNode()]).Children : NullYMap);
 			SchumixsMap((!servermap.IsNull() && servermap.ContainsKey("Schumixs")) ? ((YamlMappingNode)servermap["Schumixs".ToYamlNode()]).Children : NullYMap);
@@ -101,7 +100,6 @@ namespace Schumix.Server.Config
 						nodes2.Add("Server",       CreateServerMap((!servermap.IsNull() && servermap.ContainsKey("Server")) ? ((YamlMappingNode)servermap["Server".ToYamlNode()]).Children : NullYMap));
 						nodes2.Add("Crash",        CreateCrashMap((!servermap.IsNull() && servermap.ContainsKey("Crash")) ? ((YamlMappingNode)servermap["Crash".ToYamlNode()]).Children : NullYMap));
 						nodes2.Add("Localization", CreateLocalizationMap((!servermap.IsNull() && servermap.ContainsKey("Localization")) ? ((YamlMappingNode)servermap["Localization".ToYamlNode()]).Children : NullYMap));
-						nodes2.Add("Update",       CreateUpdateMap((!servermap.IsNull() && servermap.ContainsKey("Update")) ? ((YamlMappingNode)servermap["Update".ToYamlNode()]).Children : NullYMap));
 						nodes2.Add("Shutdown",     CreateShutdownMap((!servermap.IsNull() && servermap.ContainsKey("Shutdown")) ? ((YamlMappingNode)servermap["Shutdown".ToYamlNode()]).Children : NullYMap));
 						nodes2.Add("Clean",        CreateCleanMap((!servermap.IsNull() && servermap.ContainsKey("Clean")) ? ((YamlMappingNode)servermap["Clean".ToYamlNode()]).Children : NullYMap));
 
@@ -190,16 +188,6 @@ namespace Schumix.Server.Config
 			string Locale = (!nodes.IsNull() && nodes.ContainsKey("Locale")) ? nodes["Locale".ToYamlNode()].ToString() : d_locale;
 
 			new LocalizationConfig(Locale);
-		}
-
-		private void UpdateMap(IDictionary<YamlNode, YamlNode> nodes)
-		{
-			bool Enabled = (!nodes.IsNull() && nodes.ContainsKey("Enabled")) ? Convert.ToBoolean(nodes["Enabled".ToYamlNode()].ToString()) : d_updateenabled;
-			string Version = (!nodes.IsNull() && nodes.ContainsKey("Version")) ? nodes["Version".ToYamlNode()].ToString() : d_updateversion;
-			string Branch = (!nodes.IsNull() && nodes.ContainsKey("Branch")) ? nodes["Branch".ToYamlNode()].ToString() : d_updatebranch;
-			string WebPage = (!nodes.IsNull() && nodes.ContainsKey("WebPage")) ? nodes["WebPage".ToYamlNode()].ToString() : d_updatewebpage;
-
-			new Framework.Config.UpdateConfig(Enabled, Version.ToLower(), Branch, WebPage);
 		}
 
 		private void ShutdownMap(IDictionary<YamlNode, YamlNode> nodes)
@@ -291,16 +279,6 @@ namespace Schumix.Server.Config
 		{
 			var map = new YamlMappingNode();
 			map.Add("Locale", (!nodes.IsNull() && nodes.ContainsKey("Locale")) ? nodes["Locale".ToYamlNode()].ToString() : d_locale);
-			return map;
-		}
-
-		private YamlMappingNode CreateUpdateMap(IDictionary<YamlNode, YamlNode> nodes)
-		{
-			var map = new YamlMappingNode();
-			map.Add("Enabled", (!nodes.IsNull() && nodes.ContainsKey("Enabled")) ? nodes["Enabled".ToYamlNode()].ToString() : d_updateenabled.ToString());
-			map.Add("Version", (!nodes.IsNull() && nodes.ContainsKey("Version")) ? nodes["Version".ToYamlNode()].ToString() : d_updateversion);
-			map.Add("Branch",  (!nodes.IsNull() && nodes.ContainsKey("Branch")) ? nodes["Branch".ToYamlNode()].ToString() : d_updatebranch);
-			map.Add("WebPage", (!nodes.IsNull() && nodes.ContainsKey("WebPage")) ? nodes["WebPage".ToYamlNode()].ToString() : d_updatewebpage);
 			return map;
 		}
 

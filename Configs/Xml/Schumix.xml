@@ -64,30 +64,15 @@
         <Ignore>MantisBTRssAddon,SvnRssAddon,GitRssAddon,HgRssAddon,WordPressRssAddon,TestAddon</Ignore>
         <Directory>Addons</Directory>
     </Addons>
-    <Scripts>
-        <Lua>False</Lua>
-        <Python>False</Python>
-        <Directory>Scripts</Directory>
-    </Scripts>
     <Crash>
         <Directory>Dumps</Directory>
     </Crash>
     <Localization>
         <Locale>enUS</Locale>
     </Localization>
-    <Update>
-        <Enabled>False</Enabled>
-        <Version>stable</Version>
-        <Branch>master</Branch>
-        <WebPage>https://github.com/Schumix/Schumix2</WebPage>
-    </Update>
     <Shutdown>
         <MaxMemory>100</MaxMemory>
     </Shutdown>
-    <Flooding>
-        <Seconds>4</Seconds>
-        <NumberOfCommands>2</NumberOfCommands>
-    </Flooding>
     <Clean>
         <Config>False</Config>
         <Database>False</Database>
