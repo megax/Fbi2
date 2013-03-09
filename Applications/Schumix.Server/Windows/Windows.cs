@@ -50,12 +50,12 @@ namespace Schumix.Server
 				case CtrlType.CTRL_C_EVENT:
 				case CtrlType.CTRL_BREAK_EVENT:
 				case CtrlType.CTRL_CLOSE_EVENT:
-					Log.Notice("Windows", "Daemon killed.");
+					//Log.Notice("Windows", "Daemon killed.");
 					MainClass.Shutdown();
 					break;
 				case CtrlType.CTRL_LOGOFF_EVENT:
 				case CtrlType.CTRL_SHUTDOWN_EVENT:
-					Log.Notice("Windows", "User is logging off.");
+					//Log.Notice("Windows", "User is logging off.");
 					MainClass.Shutdown();
 					break;
 				default:

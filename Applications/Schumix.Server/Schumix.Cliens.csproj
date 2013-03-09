@@ -8,7 +8,6 @@
     <ProjectGuid>{B57F5CBD-3E27-4213-8202-103B75765BDC}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Schumix.Server</RootNamespace>
-    <AssemblyName>Server</AssemblyName>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <ReleaseVersion>3.x</ReleaseVersion>
   </PropertyGroup>
@@ -21,6 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
+    <AssemblyName>Cliens</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -30,6 +30,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
+    <AssemblyName>Cliens</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,6 +41,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>Server</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DebugType>none</DebugType>
@@ -49,33 +51,20 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>Server</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
     <Reference Include="Mono.Posix">
       <HintPath>..\..\Dependencies\Mono.Posix.dll</HintPath>
-    </Reference>
-    <Reference Include="YamlDotNet.Core">
-      <HintPath>..\..\Dependencies\YamlDotNet.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="YamlDotNet.RepresentationModel">
-      <HintPath>..\..\Dependencies\YamlDotNet.RepresentationModel.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Config\Config.cs" />
     <Compile Include="Linux\Linux.cs" />
     <Compile Include="Windows\Windows.cs" />
     <Compile Include="Windows\CtrlType.cs" />
-    <Compile Include="Config\ServerConfig.cs" />
-    <Compile Include="Config\LocalizationConfig.cs" />
-    <Compile Include="Config\DefaultConfig.cs" />
-    <Compile Include="Config\XmlConfig.cs" />
-    <Compile Include="Config\YamlConfig.cs" />
-    <Compile Include="Config\ServerConfigs.cs" />
     <Compile Include="ClientPacketHandler.cs" />
     <Compile Include="ClientPacketHandlerDelegate.cs" />
     <Compile Include="ClientSocket.cs" />
@@ -83,7 +72,6 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="Config\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Schumix.Framework\Schumix.Framework.csproj">

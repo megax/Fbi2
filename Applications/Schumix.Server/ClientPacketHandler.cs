@@ -70,7 +70,7 @@ namespace Schumix.Framework.Client
 		{
 			var hst = client.Client.RemoteEndPoint.ToString().Split(SchumixBase.Colon)[0];
 			var packetid = packet.Read<int>();
-			Log.Debug("PacketHandler", sLConsole.ClientPacketHandler("Text"), packetid, client.Client.RemoteEndPoint);
+			//Log.Debug("PacketHandler", sLConsole.ClientPacketHandler("Text"), packetid, client.Client.RemoteEndPoint);
 
 			if(packetid == (int)Opcode.SMSG_AUTH_DENIED)
 				OnAuthDenied(packet, hst);
@@ -91,9 +91,9 @@ namespace Schumix.Framework.Client
 		/// </param>
 		public void AuthDeniedHandler(SchumixPacket pck, string hst)
 		{
-			Log.Error("SchumixServer", sLConsole.ClientPacketHandler("Text2"));
-			Log.Warning("CloseHandler", sLConsole.ClientPacketHandler("Text3"));
-			Log.Warning("CloseHandler", sLConsole.ClientPacketHandler("Text4"));
+			//Log.Error("SchumixServer", sLConsole.ClientPacketHandler("Text2"));
+			//Log.Warning("CloseHandler", sLConsole.ClientPacketHandler("Text3"));
+			//Log.Warning("CloseHandler", sLConsole.ClientPacketHandler("Text4"));
 			Thread.Sleep(1000);
 			Environment.Exit(1);
 		}
@@ -109,23 +109,23 @@ namespace Schumix.Framework.Client
 		/// </param>
 		public void AuthApprovedHandler(SchumixPacket pck, string hst)
 		{
-			Log.Success("SchumixServer", sLConsole.ClientPacketHandler("Text5"));
+			//Log.Success("SchumixServer", sLConsole.ClientPacketHandler("Text5"));
 		}
 
 		private void CloseHandler(SchumixPacket pck, string hst)
 		{
-			if(SchumixBase.ExitStatus)
-				return;
+			//if(SchumixBase.ExitStatus)
+			//	return;
 
-			Log.Warning("CloseHandler", sLConsole.ClientPacketHandler("Text3"));
-			Log.Warning("CloseHandler", sLConsole.ClientPacketHandler("Text4"));
-			SchumixBase.Quit();
+			//Log.Warning("CloseHandler", sLConsole.ClientPacketHandler("Text3"));
+			//Log.Warning("CloseHandler", sLConsole.ClientPacketHandler("Text4"));
+			//SchumixBase.Quit();
 
-			foreach(var nw in INetwork.WriterList)
-			{
-				if(!nw.Value.IsNull())
-					nw.Value.WriteLine("QUIT :Server killed.");
-			}
+			//foreach(var nw in INetwork.WriterList)
+			//{
+			//	if(!nw.Value.IsNull())
+			//		nw.Value.WriteLine("QUIT :Server killed.");
+			//}
 
 			Thread.Sleep(1000);
 			Process.GetCurrentProcess().Kill();

@@ -61,8 +61,8 @@ namespace Schumix.Framework.Client
 		/// </summary>
 		public void Socket()
 		{
-			Log.Notice("ClientSocket", sLConsole.ClientSocket("Text"));
-			Log.Notice("ClientSocket", sLConsole.ClientSocket("Text2"), client.Client.RemoteEndPoint);
+			//Log.Notice("ClientSocket", sLConsole.ClientSocket("Text"));
+			//Log.Notice("ClientSocket", sLConsole.ClientSocket("Text2"), client.Client.RemoteEndPoint);
 			var client_thread = new Thread(new ParameterizedThreadStart(ClientHandler));
 			client_thread.Start(client);
 			Thread.Sleep(50);
@@ -86,7 +86,7 @@ namespace Schumix.Framework.Client
 			stream = client.GetStream();
 			byte[] message_buffer = new byte[262144];
 			int bytes_read;
-			Log.Notice("ClientHandler", sLConsole.ClientSocket("Text3"));
+			//Log.Notice("ClientHandler", sLConsole.ClientSocket("Text3"));
 
 			while(true)
 			{
@@ -95,12 +95,12 @@ namespace Schumix.Framework.Client
 				// read
 				if(stream.DataAvailable && stream.CanRead)
 				{
-					Log.Debug("ClientHandler", sLConsole.ClientSocket("Text4"));
+					//Log.Debug("ClientHandler", sLConsole.ClientSocket("Text4"));
 					bytes_read = stream.Read(message_buffer, 0, message_buffer.Length);
 
 					if(bytes_read == 0)
 					{
-						Log.Warning("ClientHandler", sLConsole.ClientSocket("Text5"));
+						//Log.Warning("ClientHandler", sLConsole.ClientSocket("Text5"));
 						break;
 					}
 
@@ -113,7 +113,7 @@ namespace Schumix.Framework.Client
 				Thread.Sleep(100);
 			}
 
-			Log.Warning("ClientHandler", sLConsole.ClientSocket("Text6"));
+			//Log.Warning("ClientHandler", sLConsole.ClientSocket("Text6"));
 			Environment.Exit(1);
 		}
 
@@ -138,17 +138,17 @@ namespace Schumix.Framework.Client
 			{
 				if(client.Connected)
 				{
-					Log.Debug("SchumixServer", sLConsole.ClientSocket("Text7"));
+					//Log.Debug("SchumixServer", sLConsole.ClientSocket("Text7"));
 					var encoder = new UTF8Encoding();
 					byte[] buffer = encoder.GetBytes(packet.GetNetMessage());
 					stream.Write(buffer, 0, buffer.Length);
 					stream.Flush();
-					Log.Debug("SchumixServer", sLConsole.ClientSocket("Text8"));
+					//Log.Debug("SchumixServer", sLConsole.ClientSocket("Text8"));
 				}
 			}
 			catch
 			{
-				Log.Error("SchumixServer", sLConsole.ClientSocket("Text9"));
+				//Log.Error("SchumixServer", sLConsole.ClientSocket("Text9"));
 			}
 		}
 	}
