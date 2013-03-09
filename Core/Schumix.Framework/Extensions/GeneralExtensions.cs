@@ -37,49 +37,6 @@ namespace Schumix.Framework.Extensions
 		private static readonly Utilities sUtilities = Singleton<Utilities>.Instance;
 
 		/// <summary>
-		/// Casts the object to the specified type.
-		/// </summary>
-		/// <typeparam name="T">The type to cast to.</typeparam>
-		/// <param name="ob">Object to cast</param>
-		/// <returns>The casted object.</returns>
-		public static T Cast<T>(this object ob)
-		{
-			Contract.Requires(!ob.IsNull());
-			Contract.Ensures(!Contract.Result<T>().IsNull());
-			var value = (T)Cast(ob, typeof(T));
-			Contract.Assume(!value.IsNull());
-			return value;
-		}
-
-		/// <summary>
-		/// Casts the specified object to the specified type.
-		/// </summary>
-		/// <param name="ob">The object to cast.</param>
-		/// <param name="targetType">Type of the target.</param>
-		/// <returns></returns>
-		public static object Cast(this object ob, Type targetType)
-		{
-			Contract.Requires(!ob.IsNull());
-			Contract.Requires(!targetType.IsNull());
-			Contract.Ensures(!Contract.Result<object>().IsNull());
-
-			if(targetType.IsEnum)
-			{
-				var str = ob as string;
-				return !str.IsNull() ? Enum.Parse(targetType, str) : Enum.ToObject(targetType, ob);
-			}
-
-			var currentType = ob.GetType();
-
-			if(currentType.IsInteger() && targetType == typeof(bool))
-				return ob.Equals(0.Cast(targetType)) ? false : true;
-
-			var end = Convert.ChangeType(ob, targetType, CultureInfo.InvariantCulture);
-			Contract.Assume(!end.IsNull());
-			return end;
-		}
-
-		/// <summary>
 		/// Determines whether the specified obj is null.
 		/// </summary>
 		/// <param name="obj">The obj.</param>
