@@ -65,7 +65,7 @@ namespace Schumix.Server
 
 			System.Console.Title = "FBI Test Cliens";
 			System.Console.ForegroundColor = ConsoleColor.Blue;
-			System.Console.WriteLine("[Server]");
+			System.Console.WriteLine("[Cliens]");
 			System.Console.WriteLine(sLConsole.MainText("StartText"));
 			System.Console.WriteLine(sLConsole.MainText("StartText2"), sUtilities.GetVersion());
 			System.Console.WriteLine(sLConsole.MainText("StartText2-2"), Consts.SchumixWebsite);
