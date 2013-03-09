@@ -420,7 +420,7 @@ namespace Schumix.Framework.Extensions
 				}
 			}
 
-			return FileName == string.Empty ? "# Schumix config file (yaml)\n" + text.ToString() : "# " + FileName + " config file (yaml)\n" + text.ToString();
+			return FileName == string.Empty ? "# FBI config file (yaml)\n" + text.ToString() : "# " + FileName + " config file (yaml)\n" + text.ToString();
 		}
 
 		public static bool ContainsKey(this IDictionary<YamlNode, YamlNode> Nodes, string Key)

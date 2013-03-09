@@ -179,7 +179,7 @@ namespace Schumix
 			else
 				System.Console.ForegroundColor = ConsoleColor.Blue;
 
-			System.Console.WriteLine("[Schumix2]");
+			System.Console.WriteLine("[FBI]");
 			System.Console.WriteLine(sLConsole.MainText("StartText"));
 			System.Console.WriteLine(sLConsole.MainText("StartText2"), sUtilities.GetVersion());
 			System.Console.WriteLine(sLConsole.MainText("StartText2-2"), Consts.SchumixWebsite);
