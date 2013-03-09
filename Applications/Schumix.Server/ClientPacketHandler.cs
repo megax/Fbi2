@@ -35,7 +35,6 @@ namespace Schumix.Framework.Client
 	/// </summary>
 	class ClientPacketHandler
 	{
-		private readonly LocalizationConsole sLConsole = Singleton<LocalizationConsole>.Instance;
 		/// <summary>
 		/// Occurs when auth is denied.
 		/// </summary>

@@ -36,7 +36,6 @@ namespace Schumix.Framework.Client
 	sealed class ClientSocket : IDisposable
 	{
 		private readonly ClientPacketHandler sClientPacketHandler = Singleton<ClientPacketHandler>.Instance;
-		private static readonly LocalizationConsole sLConsole = Singleton<LocalizationConsole>.Instance;
 		private readonly Utilities sUtilities = Singleton<Utilities>.Instance;
 		private static NetworkStream stream;
 		private static TcpClient client;

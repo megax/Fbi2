@@ -121,6 +121,7 @@ namespace Schumix.Server
 			if(!eventArgs.IsNull())
 			{
 				//Log.Error("Main", sLConsole.MainText("StartText4"), eventArgs);
+				Console.WriteLine("Crash: {0}", eventArgs.Message);
 				sCrashDumper.CreateCrashDump(eventArgs);
 			}
 

@@ -43,7 +43,6 @@ namespace Schumix.Framework.Database
 			if(!Initialize(host, username, password, database, charset))
 			{
 				Log.Error("MySql", sLConsole.MySql("Text"));
-				SchumixBase.ServerDisconnect(false);
 				Thread.Sleep(1000);
 				Process.GetCurrentProcess().Kill();
 			}
@@ -137,13 +136,6 @@ namespace Schumix.Framework.Database
 					Log.Error("MySql", sLConsole.MySql("Text5"));
 					Log.Warning("MySql", sLConsole.MySql("Text4"));
 					SchumixBase.Quit(false);
-	
-					foreach(var nw in INetwork.WriterList)
-					{
-						if(!nw.Value.IsNull())
-							nw.Value.WriteLine("QUIT :Sql connection crash.");
-					}
-	
 					Thread.Sleep(1000);
 					Process.GetCurrentProcess().Kill();
 				}
@@ -162,13 +154,6 @@ namespace Schumix.Framework.Database
 				Log.Error("MySql", sLConsole.MySql("Text3"), m.Message);
 				Log.Warning("MySql", sLConsole.MySql("Text4"));
 				SchumixBase.Quit(false);
-
-				foreach(var nw in INetwork.WriterList)
-				{
-					if(!nw.Value.IsNull())
-						nw.Value.WriteLine("QUIT :Sql connection crash.");
-				}
-
 				Thread.Sleep(1000);
 				Process.GetCurrentProcess().Kill();
 			}
@@ -179,13 +164,6 @@ namespace Schumix.Framework.Database
 				Log.Error("MySql", sLConsole.MySql("Text3"), m.Message);
 				Log.Warning("MySql", sLConsole.MySql("Text4"));
 				SchumixBase.Quit(false);
-
-				foreach(var nw in INetwork.WriterList)
-				{
-					if(!nw.Value.IsNull())
-						nw.Value.WriteLine("QUIT :Sql connection crash.");
-				}
-
 				Thread.Sleep(1000);
 				Process.GetCurrentProcess().Kill();
 			}
@@ -196,13 +174,6 @@ namespace Schumix.Framework.Database
 				Log.Error("MySql", sLConsole.MySql("Text3"), m.Message);
 				Log.Warning("MySql", sLConsole.MySql("Text4"));
 				SchumixBase.Quit(false);
-
-				foreach(var nw in INetwork.WriterList)
-				{
-					if(!nw.Value.IsNull())
-						nw.Value.WriteLine("QUIT :Sql connection timeout.");
-				}
-
 				Thread.Sleep(1000);
 				Process.GetCurrentProcess().Kill();
 			}
@@ -213,13 +184,6 @@ namespace Schumix.Framework.Database
 				Log.Error("MySql", sLConsole.MySql("Text3"), m.Message);
 				Log.Warning("MySql", sLConsole.MySql("Text4"));
 				SchumixBase.Quit(false);
-
-				foreach(var nw in INetwork.WriterList)
-				{
-					if(!nw.Value.IsNull())
-						nw.Value.WriteLine("QUIT :Sql connection timeout.");
-				}
-
 				Thread.Sleep(1000);
 				Process.GetCurrentProcess().Kill();
 			}

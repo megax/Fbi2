@@ -44,7 +44,7 @@ namespace Schumix.Server
 				new UnixSignal(Signum.SIGHUP)
 			};
 
-			int which = UnixSignal.WaitAny(signals, -1);
+			/*int which = */UnixSignal.WaitAny(signals, -1);
 			//Log.Debug("Linux", "Got a {0} signal!", signals[which].Signum);
 			//Log.Notice("Linux", "Handler Terminated.");
 			MainClass.Shutdown();

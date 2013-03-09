@@ -60,7 +60,6 @@ namespace Schumix.Framework.Database
 			{
 				Log.LargeError(sLConsole.Exception("MajorError"));
 				Log.Error("DatabaseManager", sLConsole.DatabaseManager("Text3"));
-				SchumixBase.ServerDisconnect(false);
 				Thread.Sleep(1000);
 				Environment.Exit(1);
 			}
@@ -68,7 +67,6 @@ namespace Schumix.Framework.Database
 			{
 				Log.LargeError(sLConsole.Exception("MajorError"));
 				Log.Error("DatabaseManager", sLConsole.DatabaseManager("Text4"));
-				SchumixBase.ServerDisconnect(false);
 				Thread.Sleep(1000);
 				Environment.Exit(1);
 			}

@@ -78,12 +78,6 @@ namespace Schumix.Framework
 				{
 					sListener = new ServerListener(ServerConfig.Port);
 					new Thread(() => sListener.Listen()).Start();
-					//var listener = new ClientSocket(ServerConfig.Host, ServerConfig.Port, ServerConfig.Password);
-					//Log.Debug("SchumixServer", sLConsole.SchumixBase("Text6"));
-					//listener.Socket();
-
-					//while(ThreadStop)
-					//	Thread.Sleep(100);
 				}
 
 				if(sUtilities.GetPlatformType() == PlatformType.Linux)
@@ -204,23 +198,6 @@ namespace Schumix.Framework
 			Log.Debug("SchumixBase", "~SchumixBase()");
 		}
 
-		public static void ServerDisconnect(bool Reconnect = true)
-		{
-			if(!ServerConfig.Enabled)
-				return;
-
-			/*var packet = new SchumixPacket();
-			packet.Write<int>((int)Opcode.CMSG_CLOSE_CONNECTION);
-			packet.Write<string>(_guid.ToString());
-			packet.Write<string>(SchumixConfig.ConfigFile);
-			packet.Write<string>(SchumixConfig.ConfigDirectory);
-			packet.Write<string>("utf-8");
-			packet.Write<string>(LocalizationConfig.Locale);
-			packet.Write<string>(Reconnect.ToString());
-			packet.Write<string>(ServerIdentify);
-			ClientSocket.SendPacketToSCS(packet);*/
-		}
-
 		public static void Quit(bool Reconnect = true)
 		{
 			lock(WriteLock)
@@ -234,7 +211,6 @@ namespace Schumix.Framework
 				sUtilities.RemovePidFile();
 				timer.SaveUptime(memory);
 				sCacheDB.Clean();
-				ServerDisconnect(Reconnect);
 			}
 		}
 

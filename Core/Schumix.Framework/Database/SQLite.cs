@@ -42,7 +42,6 @@ namespace Schumix.Framework.Database
 			if(!Initialize(file))
 			{
 				Log.Error("SQLite", sLConsole.SQLite("Text"));
-				SchumixBase.ServerDisconnect(false);
 				Thread.Sleep(1000);
 				Process.GetCurrentProcess().Kill();
 			}
@@ -154,13 +153,6 @@ namespace Schumix.Framework.Database
 				Log.Error("SQLite", sLConsole.SQLite("Text3"), s.Message);
 				Log.Warning("SQLite", sLConsole.SQLite("Text4"));
 				SchumixBase.Quit(false);
-
-				foreach(var nw in INetwork.WriterList)
-				{
-					if(!nw.Value.IsNull())
-						nw.Value.WriteLine("QUIT :Sql connection crash.");
-				}
-
 				Thread.Sleep(1000);
 				Process.GetCurrentProcess().Kill();
 			}
@@ -171,13 +163,6 @@ namespace Schumix.Framework.Database
 				Log.Error("SQLite", sLConsole.SQLite("Text3"), s.Message);
 				Log.Warning("SQLite", sLConsole.SQLite("Text4"));
 				SchumixBase.Quit(false);
-
-				foreach(var nw in INetwork.WriterList)
-				{
-					if(!nw.Value.IsNull())
-						nw.Value.WriteLine("QUIT :Sql connection crash.");
-				}
-
 				Thread.Sleep(1000);
 				Process.GetCurrentProcess().Kill();
 			}
@@ -188,13 +173,6 @@ namespace Schumix.Framework.Database
 				Log.Error("SQLite", sLConsole.SQLite("Text3"), s.Message);
 				Log.Warning("SQLite", sLConsole.SQLite("Text4"));
 				SchumixBase.Quit(false);
-
-				foreach(var nw in INetwork.WriterList)
-				{
-					if(!nw.Value.IsNull())
-						nw.Value.WriteLine("QUIT :Sql connection timeout.");
-				}
-
 				Thread.Sleep(1000);
 				Process.GetCurrentProcess().Kill();
 			}
