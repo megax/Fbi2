@@ -82,7 +82,6 @@
     <Compile Include="Database\SQLite.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="Database\MySql.cs" />
-    <Compile Include="Exceptions\SchumixException.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Timer.cs" />
     <Compile Include="Localization\LocalizationManager.cs" />

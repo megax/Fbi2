@@ -67,7 +67,7 @@ namespace Schumix.Irc
 						switch(type)
 						{
 							case MessageType.Privmsg:
-								WriteLine("PRIVMSG {0} :{1}", channel.ToLower(), IgnoreCommand(text));
+								WriteLine("PRIVMSG {0} :{1}", channel.ToLower(), text);
 								break;
 							case MessageType.Notice:
 								WriteLine("NOTICE {0} :{1}", channel, text);
@@ -76,7 +76,7 @@ namespace Schumix.Irc
 								var clist = ChannelList();
 								foreach(var chan in clist)
 								{
-									WriteLine("PRIVMSG {0} :{1}", chan, IgnoreCommand(text));
+									WriteLine("PRIVMSG {0} :{1}", chan, text);
 									Thread.Sleep(400);
 								}
 
@@ -103,7 +103,7 @@ namespace Schumix.Irc
 					switch(type)
 					{
 						case MessageType.Privmsg:
-							WriteLine("PRIVMSG {0} :{1}", channel.ToLower(), IgnoreCommand(message));
+							WriteLine("PRIVMSG {0} :{1}", channel.ToLower(), message);
 							break;
 						case MessageType.Notice:
 							WriteLine("NOTICE {0} :{1}", channel, message);
@@ -112,7 +112,7 @@ namespace Schumix.Irc
 							var clist = ChannelList();
 							foreach(var chan in clist)
 							{
-								WriteLine("PRIVMSG {0} :{1}", chan, IgnoreCommand(message));
+								WriteLine("PRIVMSG {0} :{1}", chan, message);
 								Thread.Sleep(400);
 							}
 
@@ -307,22 +307,6 @@ namespace Schumix.Irc
 			{
 				WriteLine(string.Format(message, args));
 			}
-		}
-
-		private string IgnoreCommand(string data)
-		{
-			var db = SchumixBase.DManager.Query("SELECT Command FROM ignore_irc_commands WHERE ServerName = '{0}'", _servername);
-			if(!db.IsNull())
-			{
-				foreach(DataRow row in db.Rows)
-				{
-					string command = row["Command"].ToString();
-					if((data.Length >= command.Length && data.ToLower().Substring(0, command.Length) == command))
-						data = SchumixBase.Space + data;
-				}
-			}
-
-			return data;
 		}
 
 		private List<string> NewLine(string Text)
