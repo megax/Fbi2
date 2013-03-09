@@ -100,48 +100,6 @@ namespace Schumix.Framework
 			}
 		}
 
-		public string GetUrlEncoding(string url, string encoding)
-		{
-			lock(WriteLock)
-			{
-				return GetUrlEncoding(url, string.Empty, string.Empty, encoding);
-			}
-		}
-
-		public string GetUrlEncoding(string url, string args, string encoding)
-		{
-			lock(WriteLock)
-			{
-				return GetUrlEncoding(url, args, string.Empty, encoding);
-			}
-		}
-
-		public string GetUrlEncoding(string url, string args, string noencode, string encoding)
-		{
-			lock(WriteLock)
-			{
-				if(args != string.Empty && noencode == string.Empty)
-					url = url + HttpUtility.UrlEncode(args);
-				else if(args != string.Empty && noencode != string.Empty)
-					url = url + HttpUtility.UrlEncode(args) + noencode;
-
-				using(var client = new WebClient())
-				{
-					double Num;
-					bool isNum = double.TryParse(encoding, out Num);
-
-					if(!isNum)
-						client.Encoding = Encoding.GetEncoding(encoding);
-					else
-						client.Encoding = Encoding.GetEncoding(Convert.ToInt32(Num));
-
-					client.Headers.Add("referer", Consts.SchumixReferer);
-					client.Headers.Add("user-agent", Consts.SchumixUserAgent);
-					return client.DownloadString(new Uri(url));
-				}
-			}
-		}
-
 		public void DownloadFile(string url, string filename)
 		{
 			using(var client = new WebClient())
@@ -150,75 +108,6 @@ namespace Schumix.Framework
 				client.Headers.Add("user-agent", Consts.SchumixUserAgent);
 				client.DownloadFile(url, filename);
 			}
-		}
-
-		/// <summary>
-		/// Gets the URLs in the specified text.
-		/// </summary>
-		/// <param name = "text">
-		/// The text to search in.
-		/// </param>
-		/// <returns>
-		/// The list of urls.
-		/// </returns>
-		public List<string> GetUrls(string text)
-		{
-			var urls = new List<string>();
-
-			try
-			{
-				var urlFind = new Regex("(?<url>(http[s]?://)"					// http[s]
-				+ "?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?"	// user@
-				+ @"(([0-9]{1,3}\.){3}[0-9]{1,3}"								// IP- 199.194.52.184
-				+ "|"															// allows either IP or domain
-				+ @"([0-9a-z_!~*'()-]+\.)*"										// tertiary domain(s)- www.
-				+ @"([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\."						// second level domain
-				+ "[a-z]{2,6})"													// first level domain- .com or .museum
-				+ "(:[0-9]{1,8})?"												// port number- :80
-				+ "(( )|(/ )|"													// a slash isn't required if there is no file name
-				+ "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-				if(urlFind.IsMatch(text))
-				{
-					var matches = urlFind.Matches(text);
-					urlFind = new Regex(@"(?<ip>([0-9]{1,3}\.){3}[0-9]{1,3})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-					foreach(var url in from Match match in matches select match.Groups["url"].ToString())
-					{
-						string lurl = url;
-
-						if(urlFind.IsMatch(lurl))
-						{
-							bool valid = false;
-							string sip = urlFind.Match(lurl).Groups["ip"].ToString();
-
-							try
-							{
-								IPAddress ip;
-								valid = IPAddress.TryParse(sip, out ip);
-							}
-							catch(ArgumentException ae)
-							{
-								Log.Error("Utilities", sLConsole.Exception("Error"), ae.Message);
-							}
-
-							if(!valid)
-								continue;
-						}
-						if(!lurl.StartsWith("http://") && !url.StartsWith("https://"))
-							lurl = string.Format("http://{0}", url);
-
-						Log.Debug("Utilities", sLConsole.Utilities("Text"), url);
-						urls.Add(lurl);
-					}
-				}
-			}
-			catch(Exception e)
-			{
-				Log.Error("Utilities", sLConsole.Exception("Error"), e.Message);
-			}
-
-			return urls;
 		}
 
 		public string GetRandomString()
@@ -506,13 +395,146 @@ namespace Schumix.Framework
 
 		public string SqlEscape(string text)
 		{
-			if(text.IsNull() || text == string.Empty)
+			if(text.IsNull() || text.IsEmpty())
 				return string.Empty;
-
-			text = Regex.Replace(text, @"'", @"\'");
-			text = Regex.Replace(text, @"\\'", @" \'");
-			text = Regex.Replace(text, @"`", @"\`");
-			text = Regex.Replace(text, @"\\`", @" \`");
+			
+			if(SQLiteConfig.Enabled)
+			{
+				var split = text.Split('\'');
+				if(split.Length > 1)
+				{
+					int x = 0;
+					var sb = new StringBuilder();
+					
+					foreach(var s in split)
+					{
+						x++;
+						
+						if(s.Length == 0 && x != split.Length)
+							sb.Append(@"''");
+						else if(s.Length == 1)
+						{
+							if(s.Substring(0, 1) != @"'")
+							{
+								sb.Append(s);
+								sb.Append(@"''");
+							}
+							else
+								sb.Append(@"' ''");
+						}
+						else
+						{
+							int i = 0;
+							string ss = s;
+							
+							for(;;)
+							{
+								if(ss.Length > 0 && ss.Substring(ss.Length-1) != @"'")
+								{
+									if(ss.Length-1 > 0)
+										sb.Append(ss.Substring(0, ss.Length));
+									
+									for(int a = 0; a < i; a++)
+										sb.Append(@"'");
+									
+									if(x != split.Length && i % 2 == 0)
+										sb.Append(@"''");
+									else if(x != split.Length)
+										sb.Append(@" ''");
+									
+									break;
+								}
+								else if(ss.Length <= 0)
+								{
+									for(int a = 0; a < i; a++)
+										sb.Append(@"'");
+									
+									if(x != split.Length && i % 2 == 0)
+										sb.Append(@"''");
+									else if(x != split.Length)
+										sb.Append(@" ''");
+									
+									break;
+								}
+								
+								i++;
+								ss = ss.Remove(ss.Length-1);
+							}
+						}
+					}
+					
+					text = sb.ToString();
+				}
+			}
+			else
+			{
+				var split = text.Split('\'');
+				if(split.Length > 1)
+				{
+					int x = 0;
+					var sb = new StringBuilder();
+					
+					foreach(var s in split)
+					{
+						x++;
+						
+						if(s.Length == 0 && x != split.Length)
+							sb.Append(@"\'");
+						else if(s.Length == 1)
+						{
+							if(s.Substring(0, 1) != @"\")
+							{
+								sb.Append(s);
+								sb.Append(@"\'");
+							}
+							else
+								sb.Append(@"\ \'");
+						}
+						else
+						{
+							int i = 0;
+							string ss = s;
+							
+							for(;;)
+							{
+								if(ss.Length > 0 && ss.Substring(ss.Length-1) != @"\")
+								{
+									if(ss.Length-1 > 0)
+										sb.Append(ss.Substring(0, ss.Length));
+									
+									for(int a = 0; a < i; a++)
+										sb.Append(@"\");
+									
+									if(x != split.Length && i % 2 == 0)
+										sb.Append(@"\'");
+									else if(x != split.Length)
+										sb.Append(@" \'");
+									
+									break;
+								}
+								else if(ss.Length <= 0)
+								{
+									for(int a = 0; a < i; a++)
+										sb.Append(@"\");
+									
+									if(x != split.Length && i % 2 == 0)
+										sb.Append(@"\'");
+									else if(x != split.Length)
+										sb.Append(@" \'");
+									
+									break;
+								}
+								
+								i++;
+								ss = ss.Remove(ss.Length-1);
+							}
+						}
+					}
+					
+					text = sb.ToString();
+				}
+			}
+			
 			return text;
 		}
 
@@ -670,377 +692,6 @@ namespace Schumix.Framework
 		{
 			if(!File.Exists(Name))
 				new FileStream(Name, FileMode.Append, FileAccess.Write, FileShare.Write).Close();
-		}
-
-		public string NameDay(string Language)
-		{
-			string[,] Nameday = null;
-
-			switch(Language)
-			{
-				case "huHU":
-				{
-					Nameday = new string[,] {
-						{ "ÚJÉV","Ábel","Genovéva","Titusz","Simon","Boldizsár","Attila","Gyöngyvér","Marcell","Melánia","Ágota","Ernő","Veronika","Bódog","Lóránt","Gusztáv","Antal","Piroska","Sára","Sebestyén","Ágnes","Vince","Zelma","Timót","Pál","Vanda","Angelika","Károly","Adél","Martina","Marcella" },
-						{ "Ignác","Karolina","Balázs","Ráhel","Ágota","Dóra","Tódor","Aranka","Abigél","Elvira","Bertold","Lívia","Ella, Linda","Bálint","Kolos","Julianna","Donát","Bernadett","Zsuzsanna","Álmos","Eleonóra","Gerzson","Alfréd","Mátyás","Géza","Edina","Ákos, Bátor","Elemér","","","" },
-						{ "Albin","Lujza","Kornélia","Kázmér","Adorján","Leonóra","Tamás","Zoltán","Franciska","Ildikó","Szilárd","Gergely","Krisztián, Ajtony","Matild","Kristóf","Henrietta","Gertrúd","Sándor","József","Klaudia","Benedek","Beáta","Emőke","Gábor","Irén","Emánuel","Hajnalka","Gedeon","Auguszta","Zalán","Árpád" },
-						{ "Hugó","Áron","Buda, Richárd","Izidor","Vince","Vilmos, Bíborka","Herman","Dénes","Erhard","Zsolt","Zsolt, Leó","Gyula","Ida","Tibor","Tas, Anasztázia","Csongor","Rudolf","Andrea","Emma","Konrád, Tivadar","Konrád","Csilla","Béla","György","Márk","Ervin","Zita","Valéria","Péter","Katalin, Kitti","" },
-						{ "Fülöp","Zsigmond","Tímea","Mónika","Györgyi","Ivett","Gizella","Mihály","Gergely","Ármin","Ferenc","Pongrác","Szervác","Bonifác","Zsófia","Botond, Mózes","Paszkál","Erik","Ivó, Milán","Bernát, Felícia","Konstantin","Júlia, Rita","Dezső","Eszter","Orbán","Fülöp","Hella","Emil, Csanád","Magdolna","Zsanett, Janka","Angéla" },
-						{ "Tünde","Anita, Kármen","Klotild","Bulcsú","Fatime","Norbert","Róbert","Medárd","Félix","Margit","Barnabás","Villő","Antal, Anett","Vazul","Jolán","Jusztin","Laura","Levente","Gyárfás","Rafael","Alajos","Paulina","Zoltán","Iván","Vilmos","János","László","Levente, Irén","Péter, Pál","Pál","" },
-						{ "Annamária","Ottó","Kornél","Ulrik","Sarolta, Emese","Csaba","Apolónia","Ellák","Lukrécia","Amália","Nóra, Lili","Izabella","Jenő","Örs","Henrik","Valter","Endre, Elek","Frigyes","Emília","Illés","Dániel","Magdolna","Lenke","Kinga, Kincső","Kristóf, Jakab","Anna, Anikó","Olga","Szabolcs","Márta","Judit","Oszkár" },
-						{ "Boglárka","Lehel","Hermina","Domonkos","Krisztina","Berta","Ibolya","László","Emőd","Lörinc","Zsuzsanna","Klára","Ipoly","Marcell","Mária","Ábrahám","Jácint","Ilona","Huba","István","Sámuel","Menyhért","Bence","Bertalan","Lajos","Izsó","Gáspár","Ágoston","Beatrix","Rózsa","Erika" },
-						{ "Egon","Rebeka","Hilda","Rozália","Viktor, Lőrinc","Zakariás","Regina","Mária","Ádám","Nikolett, Hunor","Teodóra","Mária","Kornél","Szeréna","Enikő","Edit","Zsófia","Diána","Vilhelmina","Friderika","Máté","Móric","Tekla","Gellért","Eufrozina","Jusztina","Adalbert","Vencel","Mihály","Jeromos","" },
-						{ "Malvin","Petra","Helga","Ferenc","Aurél","Renáta","Amália","Koppány","Dénes","Gedeon","Brigitta","Miksa","Kálmán","Helén","Teréz","Gál","Hedvig","Lukács","Nándor","Vendel","Orsolya","Előd","Gyöngyi","Salamon","Bianka","Dömötör","Szabina","Simon","Nárcisz","Alfonz","Farkas" },
-						{ "Marianna","Achilles","Győző","Károly","Imre","Lénárd","Rezső","Zsombor","Tivadar","Réka","Márton","Jónás, Renátó","Szilvia","Aliz","Albert, Lipót","Ödön","Hortenzia, Gergő","Jenő","Erzsébet","Jolán","Olivér","Cecília","Kelemen","Emma","Katalin","Virág","Virgil","Stefánia","Taksony","András, Andor","" },
-						{ "Elza","Melinda","Ferenc","Barbara, Borbála","Vilma","Miklós","Ambrus","Mária","Natália","Judit","Árpád","Gabriella","Luca","Szilárda","Valér","Etelka","Lázár","Auguszta","Viola","Teofil","Tamás","Zéno","Viktória","Ádám, Éva","KARÁCSONY","KARÁCSONY","János","Kamilla","Tamás","Dávid","Szilveszter" },
-					};
-					break;
-				}
-				//case "enUS":
-				//{
-				//	Nameday = null;
-				//	break;
-				//}
-				default:
-				{
-					Nameday = new string[,] {
-						{ "ÚJÉV","Ábel","Genovéva","Titusz","Simon","Boldizsár","Attila","Gyöngyvér","Marcell","Melánia","Ágota","Ernő","Veronika","Bódog","Lóránt","Gusztáv","Antal","Piroska","Sára","Sebestyén","Ágnes","Vince","Zelma","Timót","Pál","Vanda","Angelika","Károly","Adél","Martina","Marcella" },
-						{ "Ignác","Karolina","Balázs","Ráhel","Ágota","Dóra","Tódor","Aranka","Abigél","Elvira","Bertold","Lívia","Ella, Linda","Bálint","Kolos","Julianna","Donát","Bernadett","Zsuzsanna","Álmos","Eleonóra","Gerzson","Alfréd","Mátyás","Géza","Edina","Ákos, Bátor","Elemér","","","" },
-						{ "Albin","Lujza","Kornélia","Kázmér","Adorján","Leonóra","Tamás","Zoltán","Franciska","Ildikó","Szilárd","Gergely","Krisztián, Ajtony","Matild","Kristóf","Henrietta","Gertrúd","Sándor","József","Klaudia","Benedek","Beáta","Emőke","Gábor","Irén","Emánuel","Hajnalka","Gedeon","Auguszta","Zalán","Árpád" },
-						{ "Hugó","Áron","Buda, Richárd","Izidor","Vince","Vilmos, Bíborka","Herman","Dénes","Erhard","Zsolt","Zsolt, Leó","Gyula","Ida","Tibor","Tas, Anasztázia","Csongor","Rudolf","Andrea","Emma","Konrád, Tivadar","Konrád","Csilla","Béla","György","Márk","Ervin","Zita","Valéria","Péter","Katalin, Kitti","" },
-						{ "Fülöp","Zsigmond","Tímea","Mónika","Györgyi","Ivett","Gizella","Mihály","Gergely","Ármin","Ferenc","Pongrác","Szervác","Bonifác","Zsófia","Botond, Mózes","Paszkál","Erik","Ivó, Milán","Bernát, Felícia","Konstantin","Júlia, Rita","Dezső","Eszter","Orbán","Fülöp","Hella","Emil, Csanád","Magdolna","Zsanett, Janka","Angéla" },
-						{ "Tünde","Anita, Kármen","Klotild","Bulcsú","Fatime","Norbert","Róbert","Medárd","Félix","Margit","Barnabás","Villő","Antal, Anett","Vazul","Jolán","Jusztin","Laura","Levente","Gyárfás","Rafael","Alajos","Paulina","Zoltán","Iván","Vilmos","János","László","Levente, Irén","Péter, Pál","Pál","" },
-						{ "Annamária","Ottó","Kornél","Ulrik","Sarolta, Emese","Csaba","Apolónia","Ellák","Lukrécia","Amália","Nóra, Lili","Izabella","Jenő","Örs","Henrik","Valter","Endre, Elek","Frigyes","Emília","Illés","Dániel","Magdolna","Lenke","Kinga, Kincső","Kristóf, Jakab","Anna, Anikó","Olga","Szabolcs","Márta","Judit","Oszkár" },
-						{ "Boglárka","Lehel","Hermina","Domonkos","Krisztina","Berta","Ibolya","László","Emőd","Lörinc","Zsuzsanna","Klára","Ipoly","Marcell","Mária","Ábrahám","Jácint","Ilona","Huba","István","Sámuel","Menyhért","Bence","Bertalan","Lajos","Izsó","Gáspár","Ágoston","Beatrix","Rózsa","Erika" },
-						{ "Egon","Rebeka","Hilda","Rozália","Viktor, Lőrinc","Zakariás","Regina","Mária","Ádám","Nikolett, Hunor","Teodóra","Mária","Kornél","Szeréna","Enikő","Edit","Zsófia","Diána","Vilhelmina","Friderika","Máté","Móric","Tekla","Gellért","Eufrozina","Jusztina","Adalbert","Vencel","Mihály","Jeromos","" },
-						{ "Malvin","Petra","Helga","Ferenc","Aurél","Renáta","Amália","Koppány","Dénes","Gedeon","Brigitta","Miksa","Kálmán","Helén","Teréz","Gál","Hedvig","Lukács","Nándor","Vendel","Orsolya","Előd","Gyöngyi","Salamon","Bianka","Dömötör","Szabina","Simon","Nárcisz","Alfonz","Farkas" },
-						{ "Marianna","Achilles","Győző","Károly","Imre","Lénárd","Rezső","Zsombor","Tivadar","Réka","Márton","Jónás, Renátó","Szilvia","Aliz","Albert, Lipót","Ödön","Hortenzia, Gergő","Jenő","Erzsébet","Jolán","Olivér","Cecília","Kelemen","Emma","Katalin","Virág","Virgil","Stefánia","Taksony","András, Andor","" },
-						{ "Elza","Melinda","Ferenc","Barbara, Borbála","Vilma","Miklós","Ambrus","Mária","Natália","Judit","Árpád","Gabriella","Luca","Szilárda","Valér","Etelka","Lázár","Auguszta","Viola","Teofil","Tamás","Zéno","Viktória","Ádám, Éva","KARÁCSONY","KARÁCSONY","János","Kamilla","Tamás","Dávid","Szilveszter" },
-					};
-					break;
-				}
-			}
-
-			if(Nameday.IsNull())
-				return string.Empty;
-
-			return Nameday[DateTime.Now.Month-1, DateTime.Now.Day-1];
-		}
-
-		public bool IsDay(int Year, int Month, int Day)
-		{
-			if(DateTime.IsLeapYear(Year))
-			{
-				switch(Month)
-				{
-					case 1:
-					case 3:
-					case 5:
-					case 7:
-					case 8:
-					case 10:
-					case 12:
-						return Day <= 31;
-					case 4:
-					case 6:
-					case 9:
-					case 11:
-						return Day <= 30;
-					case 2:
-						return Day <= 29;
-				}
-			}
-			else
-			{
-				switch(Month)
-				{
-					case 1:
-					case 3:
-					case 5:
-					case 7:
-					case 8:
-					case 10:
-					case 12:
-						return Day <= 31;
-					case 4:
-					case 6:
-					case 9:
-					case 11:
-						return Day <= 30;
-					case 2:
-						return Day <= 28;
-				}
-			}
-
-			return false;
-		}
-
-		public string DownloadString(Uri url, int maxlength)
-		{
-			lock(WriteLock)
-			{
-				return DownloadString(url.ToString(), maxlength);
-			}
-		}
-
-		public string DownloadString(string url, int maxlength)
-		{
-			lock(WriteLock)
-			{
-				try
-				{
-					var request = (HttpWebRequest)WebRequest.Create(url);
-					new Thread(() =>
-					{
-						Thread.Sleep(13*1000);
-
-						if(!request.IsNull())
-							request.Abort();
-					});
-
-					request.AllowAutoRedirect = true;
-					request.UserAgent = Consts.SchumixUserAgent;
-					request.Referer = Consts.SchumixReferer;
-					request.Timeout = 10*1000;
-					request.ReadWriteTimeout = 10*1000;
-
-					int length = 0;
-					byte[] buf = new byte[1024];
-					var sb = new StringBuilder();
-					var response = (HttpWebResponse)request.GetResponse();
-					var stream = response.GetResponseStream();
-
-					while((length = stream.Read(buf, 0, buf.Length)) != 0)
-					{
-						if(sb.Length >= maxlength)
-							break;
-
-						buf = Encoding.Convert(Encoding.GetEncoding(response.CharacterSet), Encoding.UTF8, buf);
-						sb.Append(Encoding.UTF8.GetString(buf, 0, length));
-					}
-
-					response.Close();
-					return sb.ToString();
-				}
-				catch(Exception e)
-				{
-					Log.Debug("Utilities", sLConsole.Exception("Error"), "(DownloadString) " + e.Message);
-					return string.Empty;
-				}
-			}
-		}
-
-		public string DownloadString(Uri url, string Contains, int maxlength = 0)
-		{
-			lock(WriteLock)
-			{
-				return DownloadString(url.ToString(), 0, Contains, null, maxlength);
-			}
-		}
-
-		public string DownloadString(string url, string Contains, int maxlength = 0)
-		{
-			lock(WriteLock)
-			{
-				return DownloadString(url, 0, Contains, null, maxlength);
-			}
-		}
-
-		public string DownloadString(Uri url, int timeout, string Contains, int maxlength = 0)
-		{
-			lock(WriteLock)
-			{
-				return DownloadString(url.ToString(), timeout, Contains, null, maxlength);
-			}
-		}
-
-		public string DownloadString(string url, int timeout, string Contains, int maxlength = 0)
-		{
-			lock(WriteLock)
-			{
-				return DownloadString(url, timeout, Contains, null, maxlength);
-			}
-		}
-
-		public string DownloadString(Uri url, string Contains, NetworkCredential credential, int maxlength = 0)
-		{
-			lock(WriteLock)
-			{
-				return DownloadString(url.ToString(), 0, Contains, credential, maxlength);
-			}
-		}
-
-		public string DownloadString(string url, string Contains, NetworkCredential credential, int maxlength = 0)
-		{
-			lock(WriteLock)
-			{
-				return DownloadString(url, 0, Contains, credential, maxlength);
-			}
-		}
-
-		public string DownloadString(Uri url, int timeout, string Contains, NetworkCredential credential, int maxlength = 0)
-		{
-			lock(WriteLock)
-			{
-				return DownloadString(url.ToString(), timeout, Contains, credential, maxlength);
-			}
-		}
-
-		public string DownloadString(string url, int timeout, string Contains, NetworkCredential credential, int maxlength = 0)
-		{
-			lock(WriteLock)
-			{
-				try
-				{
-					var request = (HttpWebRequest)WebRequest.Create(url);
-					new Thread(() =>
-					{
-						if(timeout != 0)
-							Thread.Sleep(timeout+3);
-						else
-							Thread.Sleep(13*1000);
-
-						if(!request.IsNull())
-							request.Abort();
-					});
-
-					if(timeout != 0)
-					{
-						request.Timeout = timeout;
-						request.ReadWriteTimeout = timeout;
-					}
-					else
-					{
-						request.Timeout = 10*1000;
-						request.ReadWriteTimeout = 10*1000;
-					}
-
-					request.AllowAutoRedirect = true;
-					request.UserAgent = Consts.SchumixUserAgent;
-					request.Referer = Consts.SchumixReferer;
-
-					if(!credential.IsNull())
-						request.Credentials = credential;
-
-					int length = 0;
-					byte[] buf = new byte[1024];
-					var sb = new StringBuilder();
-					var response = (HttpWebResponse)request.GetResponse();
-					var stream = response.GetResponseStream();
-
-					if(maxlength == 0)
-						maxlength = 10000;
-
-					while((length = stream.Read(buf, 0, buf.Length)) != 0)
-					{
-						if(sb.ToString().Contains(Contains) || sb.Length >= 10000)
-							break;
-
-						buf = Encoding.Convert(Encoding.GetEncoding(response.CharacterSet), Encoding.UTF8, buf);
-						sb.Append(Encoding.UTF8.GetString(buf, 0, length));
-					}
-
-					response.Close();
-					return sb.ToString();
-				}
-				catch(Exception e)
-				{
-					Log.Debug("Utilities", sLConsole.Exception("Error"), "(DownloadString) " + e.Message);
-					return string.Empty;
-				}
-			}
-		}
-
-		public string DownloadString(Uri url, Regex regex, int maxlength = 0)
-		{
-			lock(WriteLock)
-			{
-				return DownloadString(url.ToString(), 0, regex, maxlength);
-			}
-		}
-
-		public string DownloadString(string url, Regex regex, int maxlength = 0)
-		{
-			lock(WriteLock)
-			{
-				return DownloadString(url, 0, regex, maxlength);
-			}
-		}
-
-		public string DownloadString(Uri url, int timeout, Regex regex, int maxlength = 0)
-		{
-			lock(WriteLock)
-			{
-				return DownloadString(url.ToString(), timeout, regex, maxlength);
-			}
-		}
-
-		public string DownloadString(string url, int timeout, Regex regex, int maxlength = 0)
-		{
-			lock(WriteLock)
-			{
-				try
-				{
-					var request = (HttpWebRequest)WebRequest.Create(url);
-					new Thread(() =>
-					{
-						if(timeout != 0)
-							Thread.Sleep(timeout+3);
-						else
-							Thread.Sleep(13*1000);
-
-						if(!request.IsNull())
-							request.Abort();
-					});
-
-					if(timeout != 0)
-					{
-						request.Timeout = timeout;
-						request.ReadWriteTimeout = timeout;
-					}
-					else
-					{
-						request.Timeout = 10*1000;
-						request.ReadWriteTimeout = 10*1000;
-					}
-
-					request.AllowAutoRedirect = true;
-					request.UserAgent = Consts.SchumixUserAgent;
-					request.Referer = Consts.SchumixReferer;
-
-					int length = 0;
-					byte[] buf = new byte[1024];
-					var sb = new StringBuilder();
-					var response = (HttpWebResponse)request.GetResponse();
-					var stream = response.GetResponseStream();
-
-					if(maxlength == 0)
-						maxlength = 10000;
-
-					while((length = stream.Read(buf, 0, buf.Length)) != 0)
-					{
-						if(regex.Match(sb.ToString()).Success || sb.Length >= maxlength)
-							break;
-
-						buf = Encoding.Convert(Encoding.GetEncoding(response.CharacterSet), Encoding.UTF8, buf);
-						sb.Append(Encoding.UTF8.GetString(buf, 0, length));
-					}
-
-					response.Close();
-					return sb.ToString();
-				}
-				catch(Exception e)
-				{
-					Log.Debug("Utilities", sLConsole.Exception("Error"), "(DownloadString) " + e.Message);
-					return string.Empty;
-				}
-			}
-		}
-
-		public bool IsValueBiggerDateTimeNow(int Year, int Month, int Day, int Hour, int Minute)
-		{
-			var time = DateTime.Now;
-			return (time.Year >= Year && time.Month >= Month && time.Day >= Day && time.Hour >= Hour && time.Minute >= Minute);
 		}
 
 		public string GetUserName()
