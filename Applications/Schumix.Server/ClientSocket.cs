@@ -83,7 +83,6 @@ namespace Schumix.Framework.Client
 		public void ClientHandler(object ob)
 		{
 			client = (ob as TcpClient);
-			Console.WriteLine(client.Connected);
 			stream = client.GetStream();
 			byte[] message_buffer = new byte[262144];
 			int bytes_read;

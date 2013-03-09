@@ -156,8 +156,6 @@ namespace Schumix.Server
 			var listener = new ClientSocket("127.0.0.1", 35220, "schumix");
 			listener.Socket();
 
-			Thread.Sleep(10*1000);
-
 			for(;;)
 			{
 				var packet = new SchumixPacket();
@@ -165,7 +163,7 @@ namespace Schumix.Server
 				packet.Write<string>("Ez az első üzenet.");
 				packet.Write<string>("Ez meg a második üzenet.");
 				ClientSocket.SendPacketToSCS(packet);
-				Thread.Sleep(5*1000);
+				Thread.Sleep(10*1000);
 			}
 		}
 
