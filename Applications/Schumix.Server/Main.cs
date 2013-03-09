@@ -48,8 +48,7 @@ namespace Schumix.Server
 		/// </summary>
 		private static void Main(string[] args)
 		{
-			sRuntime.SetProcessName("Server");
-			System.Console.CursorVisible = false;
+			sRuntime.SetProcessName("Cliens");
 			System.Console.BackgroundColor = ConsoleColor.Black;
 			System.Console.ForegroundColor = ConsoleColor.Gray;
 
@@ -91,6 +90,8 @@ namespace Schumix.Server
 			var listener = new ClientSocket("127.0.0.1", 35220, "schumix");
 			listener.Socket();
 
+			Thread.Sleep(5*1000);
+
 			for(;;)
 			{
 				Console.WriteLine("Üzenet küldése...");
@@ -116,8 +117,6 @@ namespace Schumix.Server
 
 		public static void Shutdown(Exception eventArgs = null)
 		{
-			System.Console.CursorVisible = true;
-
 			if(!eventArgs.IsNull())
 			{
 				//Log.Error("Main", sLConsole.MainText("StartText4"), eventArgs);
