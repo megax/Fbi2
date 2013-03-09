@@ -3,19 +3,6 @@
 PRAGMA foreign_keys = OFF;
 
 -- ----------------------------
--- Table structure for "admins"
--- ----------------------------
-CREATE TABLE "admins" (
-Id INTEGER PRIMARY KEY AUTOINCREMENT,
-ServerId INTEGER DEFAULT 1,
-ServerName VARCHAR(40),
-Name VARCHAR(20),
-Password VARCHAR(40),
-Vhost VARCHAR(50),
-Flag BIGINT DEFAULT 0
-);
-
--- ----------------------------
 -- Table structure for "channel"
 -- ----------------------------
 CREATE TABLE "channels" (
@@ -54,37 +41,6 @@ Text TEXT
 -- Table structure for localized_console_warning
 -- ----------------------------
 CREATE TABLE "localized_console_warning" (
-Id INTEGER PRIMARY KEY AUTOINCREMENT,
-Language VARCHAR(4) DEFAULT 'enUS',
-Command TEXT,
-Text TEXT
-);
-
--- ----------------------------
--- Table structure for "localized_command"
--- ----------------------------
-CREATE TABLE "localized_command" (
-Id INTEGER PRIMARY KEY AUTOINCREMENT,
-Language VARCHAR(4) DEFAULT 'enUS',
-Command TEXT,
-Text TEXT
-);
-
--- ----------------------------
--- Table structure for "localized_command_help"
--- ----------------------------
-CREATE TABLE "localized_command_help" (
-Id INTEGER PRIMARY KEY AUTOINCREMENT,
-Language VARCHAR(4) DEFAULT 'enUS',
-Command TEXT,
-Rank INTEGER DEFAULT 0,
-Text TEXT
-);
-
--- ----------------------------
--- Table structure for "localized_warning"
--- ----------------------------
-CREATE TABLE "localized_warning" (
 Id INTEGER PRIMARY KEY AUTOINCREMENT,
 Language VARCHAR(4) DEFAULT 'enUS',
 Command TEXT,

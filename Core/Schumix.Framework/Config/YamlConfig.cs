@@ -69,7 +69,6 @@ namespace Schumix.Framework.Config
 
 			MySqlMap((!schumixmap.IsNull() && schumixmap.ContainsKey("MySql")) ? ((YamlMappingNode)schumixmap["MySql".ToYamlNode()]).Children : NullYMap);
 			SQLiteMap((!schumixmap.IsNull() && schumixmap.ContainsKey("SQLite")) ? ((YamlMappingNode)schumixmap["SQLite".ToYamlNode()]).Children : NullYMap);
-			AddonsMap((!schumixmap.IsNull() && schumixmap.ContainsKey("Addon")) ? ((YamlMappingNode)schumixmap["Addon".ToYamlNode()]).Children : NullYMap);
 			CrashMap((!schumixmap.IsNull() && schumixmap.ContainsKey("Crash")) ? ((YamlMappingNode)schumixmap["Crash".ToYamlNode()]).Children : NullYMap);
 			LocalizationMap((!schumixmap.IsNull() && schumixmap.ContainsKey("Localization")) ? ((YamlMappingNode)schumixmap["Localization".ToYamlNode()]).Children : NullYMap);
 			ShutdownMap((!schumixmap.IsNull() && schumixmap.ContainsKey("Shutdown")) ? ((YamlMappingNode)schumixmap["Shutdown".ToYamlNode()]).Children : NullYMap);
@@ -124,7 +123,6 @@ namespace Schumix.Framework.Config
 						nodes2.Add("Log",          CreateLogMap((!schumixmap.IsNull() && schumixmap.ContainsKey("Log")) ? ((YamlMappingNode)schumixmap["Log".ToYamlNode()]).Children : NullYMap));
 						nodes2.Add("MySql",        CreateMySqlMap((!schumixmap.IsNull() && schumixmap.ContainsKey("MySql")) ? ((YamlMappingNode)schumixmap["MySql".ToYamlNode()]).Children : NullYMap));
 						nodes2.Add("SQLite",       CreateSQLiteMap((!schumixmap.IsNull() && schumixmap.ContainsKey("SQLite")) ? ((YamlMappingNode)schumixmap["SQLite".ToYamlNode()]).Children : NullYMap));
-						nodes2.Add("Addon",        CreateAddonsMap((!schumixmap.IsNull() && schumixmap.ContainsKey("Addon")) ? ((YamlMappingNode)schumixmap["Addon".ToYamlNode()]).Children : NullYMap));
 						nodes2.Add("Crash",        CreateCrashMap((!schumixmap.IsNull() && schumixmap.ContainsKey("Crash")) ? ((YamlMappingNode)schumixmap["Crash".ToYamlNode()]).Children : NullYMap));
 						nodes2.Add("Localization", CreateLocalizationMap((!schumixmap.IsNull() && schumixmap.ContainsKey("Localization")) ? ((YamlMappingNode)schumixmap["Localization".ToYamlNode()]).Children : NullYMap));
 						nodes2.Add("Shutdown",     CreateShutdownMap((!schumixmap.IsNull() && schumixmap.ContainsKey("Shutdown")) ? ((YamlMappingNode)schumixmap["Shutdown".ToYamlNode()]).Children : NullYMap));
@@ -311,15 +309,6 @@ namespace Schumix.Framework.Config
 			string FileName = (!nodes.IsNull() && nodes.ContainsKey("FileName")) ? nodes["FileName".ToYamlNode()].ToString() : d_sqlitefilename;
 
 			new SQLiteConfig(Enabled, sUtilities.GetSpecialDirectory(FileName));
-		}
-
-		private void AddonsMap(IDictionary<YamlNode, YamlNode> nodes)
-		{
-			bool Enabled = (!nodes.IsNull() && nodes.ContainsKey("Enabled")) ? Convert.ToBoolean(nodes["Enabled".ToYamlNode()].ToString()) : d_addonenabled;
-			string Ignore = (!nodes.IsNull() && nodes.ContainsKey("Ignore")) ? nodes["Ignore".ToYamlNode()].ToString() : d_addonignore;
-			string Directory = (!nodes.IsNull() && nodes.ContainsKey("Directory")) ? nodes["Directory".ToYamlNode()].ToString() : d_addondirectory;
-
-			new AddonsConfig(Enabled, Ignore, sUtilities.GetSpecialDirectory(Directory));
 		}
 
 		private void CrashMap(IDictionary<YamlNode, YamlNode> nodes)
@@ -515,15 +504,6 @@ namespace Schumix.Framework.Config
 			var map = new YamlMappingNode();
 			map.Add("Enabled",  (!nodes.IsNull() && nodes.ContainsKey("Enabled")) ? nodes["Enabled".ToYamlNode()].ToString() : d_sqliteenabled.ToString());
 			map.Add("FileName", (!nodes.IsNull() && nodes.ContainsKey("FileName")) ? nodes["FileName".ToYamlNode()].ToString() : d_sqlitefilename);
-			return map;
-		}
-
-		private YamlMappingNode CreateAddonsMap(IDictionary<YamlNode, YamlNode> nodes)
-		{
-			var map = new YamlMappingNode();
-			map.Add("Enabled",   (!nodes.IsNull() && nodes.ContainsKey("Enabled")) ? nodes["Enabled".ToYamlNode()].ToString() : d_addonenabled.ToString());
-			map.Add("Ignore",    (!nodes.IsNull() && nodes.ContainsKey("Ignore")) ? nodes["Ignore".ToYamlNode()].ToString() : d_addonignore);
-			map.Add("Directory", (!nodes.IsNull() && nodes.ContainsKey("Directory")) ? nodes["Directory".ToYamlNode()].ToString() : d_addondirectory);
 			return map;
 		}
 

@@ -223,7 +223,6 @@ namespace Schumix
 				Shutdown("Crash.", true);
 			};
 
-			sUtilities.CleanHomeDirectory();
 			new SchumixBot();
 		}
 

@@ -59,11 +59,6 @@
         <Enabled>True</Enabled>
         <FileName>Schumix.db3</FileName>
     </SQLite>
-    <Addons>
-        <Enabled>True</Enabled>
-        <Ignore>MantisBTRssAddon,SvnRssAddon,GitRssAddon,HgRssAddon,WordPressRssAddon,TestAddon</Ignore>
-        <Directory>Addons</Directory>
-    </Addons>
     <Crash>
         <Directory>Dumps</Directory>
     </Crash>

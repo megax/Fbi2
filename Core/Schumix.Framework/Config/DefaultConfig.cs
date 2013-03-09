@@ -63,9 +63,6 @@ namespace Schumix.Framework.Config
 		protected const string d_mysqlcharset          = "utf8";
 		protected const bool d_sqliteenabled           = true;
 		protected const string d_sqlitefilename        = "Schumix.db3";
-		protected const bool d_addonenabled            = true;
-		protected const string d_addonignore           = "MantisBTRssAddon,SvnRssAddon,GitRssAddon,HgRssAddon,WordPressRssAddon,TestAddon";
-		protected const string d_addondirectory        = "Addons";
 		protected const string d_crashdirectory        = "Dumps";
 		protected const string d_locale                = "enUS";
 		protected const int d_shutdownmaxmemory        = 100;

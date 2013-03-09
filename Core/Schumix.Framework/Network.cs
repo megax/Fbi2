@@ -34,7 +34,6 @@ using Schumix.API.Irc;
 using Schumix.API.Delegate;
 using Schumix.API.Functions;
 using Schumix.Framework;
-using Schumix.Framework.Addon;
 using Schumix.Framework.Config;
 using Schumix.Framework.Database;
 using Schumix.Framework.Extensions;
@@ -46,7 +45,6 @@ namespace Schumix.Irc
 		private readonly Dictionary<string, IrcMethod> IrcMethodMap = new Dictionary<string, IrcMethod>();
 		private System.Timers.Timer _timeropcode = new System.Timers.Timer();
 		private CancellationTokenSource _cts = new CancellationTokenSource();
-		private readonly object IrcMapLock = new object();
 
 		public Dictionary<string, IrcMethod> GetIrcMethodMap()
 		{
@@ -140,7 +138,6 @@ namespace Schumix.Irc
 		{
 			InitHandler();
 			InitializeCommandHandler();
-			InitializeCommandMgr();
 			Task.Factory.StartNew(() => sChannelInfo.ChannelList());
 		}
 
@@ -179,48 +176,13 @@ namespace Schumix.Irc
 			IrcRegisterHandler("PART",                         HandleIrcLeft);
 			IrcRegisterHandler("KICK",                         HandleIrcKick);
 			IrcRegisterHandler("QUIT",                         HandleIrcQuit);
-			IrcRegisterHandler("NICK",                         HandleNewNick);
 			IrcRegisterHandler("MODE",                         HandleIrcMode);
 			IrcRegisterHandler("TOPIC",                        HandleIrcTopic);
 			IrcRegisterHandler("INVITE",                       HandleIrcInvite);
-			IrcRegisterHandler(ReplyCode.RPL_NAMREPLY,         HandleNameList);
-			IrcRegisterHandler(ReplyCode.RPL_ENDOFNAMES,       HandleEndNameList);
-			IrcRegisterHandler(ReplyCode.ERR_ERRONEUSNICKNAME, HandlerErrorNewNickName);
-			IrcRegisterHandler(ReplyCode.ERR_UNAVAILRESOURCE,  HandleNicknameWhileBannedOrModeratedOnChannel);
 			IrcRegisterHandler(ReplyCode.ERR_INVITEONLYCHAN,   HandleCannotJoinChannel);
-
-			var asms = sAddonManager.Addons[_servername].Assemblies.ToDictionary(v => v.Key, v => v.Value);
-			Parallel.ForEach(asms, asm =>
-			{
-				var types = asm.Value.GetTypes();
-				Parallel.ForEach(types, type =>
-				{
-					var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static);
-					IrcProcessMethods(methods);
-				});
-			});
 
 			Console.WriteLine();
 			Log.Notice("Network", sLConsole.Network("Text5"));
-		}
-
-		private void IrcProcessMethods(IEnumerable<MethodInfo> methods)
-		{
-			Parallel.ForEach(methods, method =>
-			{
-				foreach(var attribute in Attribute.GetCustomAttributes(method))
-				{
-					if(attribute.IsOfType(typeof(IrcCommandAttribute)))
-					{
-						var attr = (IrcCommandAttribute)attribute;
-						lock(IrcMapLock)
-						{
-							var del = Delegate.CreateDelegate(typeof(IRCDelegate), method) as IRCDelegate;
-							IrcRegisterHandler(attr.Command, del);
-						}
-					}
-				}
-			});
 		}
 
 		public void IrcRegisterHandler(string code, IRCDelegate method)
@@ -417,7 +379,6 @@ namespace Schumix.Irc
 			Online = false;
 			IsAllJoin = false;
 			_enabled = true;
-			NewNickPrivmsg = string.Empty;
 			SchumixBase.UrlTitleEnabled = false;
 			sNickInfo.ChangeIdentifyStatus(false);
 			sNickInfo.ChangeVhostStatus(false);

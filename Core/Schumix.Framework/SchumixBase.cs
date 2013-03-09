@@ -25,7 +25,6 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using Schumix.API;
 using Schumix.API.Functions;
-using Schumix.Framework.Addon;
 using Schumix.Framework.Clean;
 using Schumix.Framework.Client;
 using Schumix.Framework.Config;
@@ -40,7 +39,6 @@ namespace Schumix.Framework
 	{
 		private readonly LocalizationConsole sLConsole = Singleton<LocalizationConsole>.Instance;
 		private readonly LocalizationManager sLManager = Singleton<LocalizationManager>.Instance;
-		private static readonly AddonManager sAddonManager = Singleton<AddonManager>.Instance;
 		private static readonly Utilities sUtilities = Singleton<Utilities>.Instance;
 		private static readonly object WriteLock = new object();
 		private static readonly Guid _guid = Guid.NewGuid();
@@ -100,13 +98,6 @@ namespace Schumix.Framework
 				{
 					DManager.Update("channels", string.Format("ServerName = '{0}'", sn.Key), string.Format("ServerId = '{0}'", sn.Value.ServerId));
 					DManager.Update("schumix", string.Format("ServerName = '{0}'", sn.Key), string.Format("ServerId = '{0}'", sn.Value.ServerId));
-					DManager.Update("hlmessage", string.Format("ServerName = '{0}'", sn.Key), string.Format("ServerId = '{0}'", sn.Value.ServerId));
-					DManager.Update("admins", string.Format("ServerName = '{0}'", sn.Key), string.Format("ServerId = '{0}'", sn.Value.ServerId));
-					DManager.Update("ignore_addons", string.Format("ServerName = '{0}'", sn.Key), string.Format("ServerId = '{0}'", sn.Value.ServerId));
-					DManager.Update("ignore_channels", string.Format("ServerName = '{0}'", sn.Key), string.Format("ServerId = '{0}'", sn.Value.ServerId));
-					DManager.Update("ignore_commands", string.Format("ServerName = '{0}'", sn.Key), string.Format("ServerId = '{0}'", sn.Value.ServerId));
-					DManager.Update("ignore_irc_commands", string.Format("ServerName = '{0}'", sn.Key), string.Format("ServerId = '{0}'", sn.Value.ServerId));
-					DManager.Update("ignore_nicks", string.Format("ServerName = '{0}'", sn.Key), string.Format("ServerId = '{0}'", sn.Value.ServerId));
 
 					var db1 = DManager.Query("SELECT Id, ServerName FROM channels WHERE ServerId = '{0}'", sn.Value.ServerId);
 					if(!db1.IsNull())
@@ -176,13 +167,6 @@ namespace Schumix.Framework
 				Log.Debug("SchumixBase", sLConsole.SchumixBase("Text9"));
 				sCleanManager = new CleanManager();
 				sCleanManager.Initialize();
-
-				if(AddonsConfig.Enabled)
-				{
-					Log.Debug("SchumixBase", sLConsole.SchumixBase("Text5"));
-					sAddonManager.Initialize();
-					sAddonManager.LoadPluginsFromDirectory(AddonsConfig.Directory);
-				}
 			}
 			catch(Exception e)
 			{
@@ -207,7 +191,6 @@ namespace Schumix.Framework
 
 				ExitStatus = true;
 				var memory = Process.GetCurrentProcess().WorkingSet64;
-				sAddonManager.UnloadPlugins();
 				sUtilities.RemovePidFile();
 				timer.SaveUptime(memory);
 				sCacheDB.Clean();

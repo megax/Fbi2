@@ -28,7 +28,7 @@ namespace Schumix.Irc
 	public sealed class IrcMethod
 	{
 		public IRCDelegate Method { get; set; }
-
+		
 		public IrcMethod(IRCDelegate method)
 		{
 			Method = method;

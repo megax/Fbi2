@@ -809,26 +809,5 @@ namespace Schumix.Framework
 			if(File.Exists(SchumixBase.PidFile))
 				File.Delete(SchumixBase.PidFile);
 		}
-
-		public void CleanHomeDirectory(bool server = false)
-		{
-			if(File.Exists(AddonsConfig.Directory + "/Schumix.db3"))
-				File.Delete(AddonsConfig.Directory + "/Schumix.db3");
-
-			if(File.Exists(AddonsConfig.Directory + "/sqlite3.dll"))
-				File.Delete(AddonsConfig.Directory + "/sqlite3.dll");
-
-			if(File.Exists(AddonsConfig.Directory + "/System.Data.SQLite.dll"))
-				File.Delete(AddonsConfig.Directory + "/System.Data.SQLite.dll");
-
-			if(File.Exists(AddonsConfig.Directory + "/MySql.Data.dll"))
-				File.Delete(AddonsConfig.Directory + "/MySql.Data.dll");
-
-			if(File.Exists(AddonsConfig.Directory + "/Schumix.API.dll"))
-				File.Delete(AddonsConfig.Directory + "/Schumix.API.dll");
-
-			if(File.Exists(AddonsConfig.Directory + "/Schumix.Framework.dll"))
-				File.Delete(AddonsConfig.Directory + "/Schumix.Framework.dll");
-		}
 	}
 }

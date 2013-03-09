@@ -27,16 +27,13 @@ namespace Schumix.Irc
 {
 	public sealed class Sender
 	{
-		private readonly LocalizationManager sLManager = Singleton<LocalizationManager>.Instance;
 		private readonly LocalizationConsole sLConsole = Singleton<LocalizationConsole>.Instance;
 		private readonly IrcBase sIrcBase = Singleton<IrcBase>.Instance;
 		private readonly object WriteLock = new object();
 		private readonly SendMessage sSendMessage;
-		private string _servername;
 
 		public Sender(string ServerName)
 		{
-			_servername = ServerName;
 			sSendMessage = sIrcBase.Networks[ServerName].sSendMessage;
 		}
 
@@ -85,7 +82,7 @@ namespace Schumix.Irc
 		{
 			lock(WriteLock)
 			{
-				Part(channel, sLConsole.Sender("Text", sLManager.GetChannelLocalization(channel, _servername)));
+				Part(channel, sLConsole.Sender("Text"));
 			}
 		}
 

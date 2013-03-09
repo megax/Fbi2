@@ -84,7 +84,6 @@ namespace Schumix.Console.Commands
 			RegisterHandler("sys",        HandleSys);
 			RegisterHandler("cchannel",   HandleConsoleToChannel);
 			RegisterHandler("cserver",    HandleOldServerToNewServer);
-			RegisterHandler("admin",      HandleAdmin);
 			RegisterHandler("function",   HandleFunction);
 			RegisterHandler("channel",    HandleChannel);
 			RegisterHandler("connect",    HandleConnect);
@@ -94,7 +93,6 @@ namespace Schumix.Console.Commands
 			RegisterHandler("join",       HandleJoin);
 			RegisterHandler("leave",      HandleLeave);
 			RegisterHandler("reload",     HandleReload);
-			RegisterHandler("plugin",     HandlePlugin);
 			RegisterHandler("quit",       HandleQuit);
 
 			Log.Notice("CCommandManager", sLConsole.CCommandManager("Text2"));

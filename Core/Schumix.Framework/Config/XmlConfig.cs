@@ -147,13 +147,7 @@ namespace Schumix.Framework.Config
 
 			new SQLiteConfig(Enabled, sUtilities.GetSpecialDirectory(FileName));
 
-			Enabled = !xmldoc.SelectSingleNode("Schumix/Addons/Enabled").IsNull() ? Convert.ToBoolean(xmldoc.SelectSingleNode("Schumix/Addons/Enabled").InnerText) : d_addonenabled;
-			string Ignore = !xmldoc.SelectSingleNode("Schumix/Addons/Ignore").IsNull() ? xmldoc.SelectSingleNode("Schumix/Addons/Ignore").InnerText : d_addonignore;
-			string Directory = !xmldoc.SelectSingleNode("Schumix/Addons/Directory").IsNull() ? xmldoc.SelectSingleNode("Schumix/Addons/Directory").InnerText : d_addondirectory;
-
-			new AddonsConfig(Enabled, Ignore, sUtilities.GetSpecialDirectory(Directory));
-
-			Directory = !xmldoc.SelectSingleNode("Schumix/Crash/Directory").IsNull() ? xmldoc.SelectSingleNode("Schumix/Crash/Directory").InnerText : d_crashdirectory;
+			string Directory = !xmldoc.SelectSingleNode("Schumix/Crash/Directory").IsNull() ? xmldoc.SelectSingleNode("Schumix/Crash/Directory").InnerText : d_crashdirectory;
 
 			new CrashConfig(sUtilities.GetSpecialDirectory(Directory));
 
@@ -376,15 +370,6 @@ namespace Schumix.Framework.Config
 						w.WriteElementString("FileName",         (!xmldoc.SelectSingleNode("Schumix/SQLite/FileName").IsNull() ? xmldoc.SelectSingleNode("Schumix/SQLite/FileName").InnerText : d_sqlitefilename));
 
 						// </SQLite>
-						w.WriteEndElement();
-
-						// <Plugins>
-						w.WriteStartElement("Addons");
-						w.WriteElementString("Enabled",          (!xmldoc.SelectSingleNode("Schumix/Addons/Enabled").IsNull() ? xmldoc.SelectSingleNode("Schumix/Addons/Enabled").InnerText : d_addonenabled.ToString()));
-						w.WriteElementString("Ignore",           (!xmldoc.SelectSingleNode("Schumix/Addons/Ignore").IsNull() ? xmldoc.SelectSingleNode("Schumix/Addons/Ignore").InnerText : d_addonignore));
-						w.WriteElementString("Directory",        (!xmldoc.SelectSingleNode("Schumix/Addons/Directory").IsNull() ? xmldoc.SelectSingleNode("Schumix/Addons/Directory").InnerText : d_addondirectory));
-
-						// </Plugins>
 						w.WriteEndElement();
 
 						// <Crash>

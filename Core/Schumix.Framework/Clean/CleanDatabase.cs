@@ -81,13 +81,6 @@ namespace Schumix.Framework.Clean
 			Log.Notice("CleanDatabase", sLConsole.CleanDatabase("Text5"));
 			CleanTable("channels");
 			CleanTable("schumix");
-			CleanTable("hlmessage");
-			CleanTable("admins");
-			CleanTable("ignore_addons");
-			CleanTable("ignore_channels");
-			CleanTable("ignore_commands");
-			CleanTable("ignore_irc_commands");
-			CleanTable("ignore_nicks");
 			Log.Notice("CleanDatabase", sLConsole.CleanDatabase("Text6"));
 		}
 	}

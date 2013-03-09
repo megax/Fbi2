@@ -22,7 +22,6 @@ using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Schumix.API.Delegate;
-using Schumix.Irc.Commands;
 using Schumix.Framework;
 using Schumix.Framework.Config;
 using Schumix.Framework.Extensions;
@@ -147,33 +146,6 @@ namespace Schumix.Irc
 			{
 				foreach(var nw in _networks)
 					nw.Value.IrcRemoveHandler(code, method);
-			}
-		}
-
-		public void SchumixRegisterHandler(string code, CommandDelegate method, CommandPermission permission = CommandPermission.Normal)
-		{
-			lock(Lock)
-			{
-				foreach(var nw in _networks)
-					nw.Value.SchumixRegisterHandler(code, method, permission);
-			}
-		}
-
-		public void SchumixRemoveHandler(string code)
-		{
-			lock(Lock)
-			{
-				foreach(var nw in _networks)
-					nw.Value.SchumixRemoveHandler(code);
-			}
-		}
-
-		public void SchumixRemoveHandler(string code, CommandDelegate method)
-		{
-			lock(Lock)
-			{
-				foreach(var nw in _networks)
-					nw.Value.SchumixRemoveHandler(code, method);
 			}
 		}
 

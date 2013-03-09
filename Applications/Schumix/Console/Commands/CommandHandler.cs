@@ -26,9 +26,7 @@ using System.Reflection;
 using System.Diagnostics;
 using Schumix.API.Delegate;
 using Schumix.Irc;
-using Schumix.Irc.Commands;
 using Schumix.Framework;
-using Schumix.Framework.Addon;
 using Schumix.Framework.Config;
 using Schumix.Framework.Extensions;
 using Schumix.Framework.Localization;
@@ -52,16 +50,10 @@ namespace Schumix.Console.Commands
 		private readonly LocalizationManager sLManager = Singleton<LocalizationManager>.Instance;
 		/// <summary>
 		///     Hozzáférést biztosít singleton-on keresztül a megadott class-hoz.
-		///     Addonok kezelése.
-		/// </summary>
-		private readonly AddonManager sAddonManager = Singleton<AddonManager>.Instance;
-		/// <summary>
-		///     Hozzáférést biztosít singleton-on keresztül a megadott class-hoz.
 		///     Utilities sokféle függvényt tartalmaz melyek hasznosak lehetnek.
 		/// </summary>
 		private readonly Utilities sUtilities = Singleton<Utilities>.Instance;
 		private readonly IrcBase sIrcBase = Singleton<IrcBase>.Instance;
-		private readonly object Lock = new object();
 		/// <summary>
 		///     A szétdarabolt információkat tárolja.
 		/// </summary>
@@ -185,159 +177,6 @@ namespace Schumix.Console.Commands
 			_servername = Info[1].ToLower();
 			Log.Notice("Console", sLManager.GetConsoleCommandText("cserver"), Info[1]);
 			System.Console.Title = SchumixBase.Title + " || Console Writing Channel: " + Info[1] + SchumixBase.Colon + _channel;
-		}
-
-		/// <summary>
-		///     Admin parancs függvénye.
-		/// </summary>
-		protected void HandleAdmin()
-		{
-			if(Info.Length >= 2 && Info[1].ToLower() == "info")
-			{
-				if(Info.Length < 3)
-				{
-					Log.Error("Console", sLManager.GetConsoleWarningText("NoName"));
-					return;
-				}
-
-				var text = sLManager.GetConsoleCommandTexts("admin/info");
-				if(text.Length < 3)
-				{
-					Log.Error("Console", sLConsole.Translations("NoFound2"));
-					return;
-				}
-
-				var db = SchumixBase.DManager.QueryFirstRow("SELECT Flag FROM admins WHERE Name = '{0}' And ServerName = '{1}'", Info[2].ToLower(), _servername);
-				int flag = !db.IsNull() ? Convert.ToInt32(db["Flag"].ToString()) : -1;
-
-				if((AdminFlag)flag == AdminFlag.HalfOperator)
-					Log.Notice("Console", text[0]);		
-				else if((AdminFlag)flag == AdminFlag.Operator)
-					Log.Notice("Console", text[1]);
-				else if((AdminFlag)flag == AdminFlag.Administrator)
-					Log.Notice("Console", text[2]);
-			}
-			else if(Info.Length >= 2 && Info[1].ToLower() == "list")
-			{
-				var db = SchumixBase.DManager.Query("SELECT Name FROM admins WHERE ServerName = '{0}'", _servername);
-				if(!db.IsNull())
-				{
-					string admins = string.Empty;
-
-					foreach(DataRow row in db.Rows)
-					{
-						string name = row["Name"].ToString();
-						admins += ", " + name;
-					}
-
-					Log.Notice("Console", sLManager.GetConsoleCommandText("admin/list"), admins.Remove(0, 2, ", "));
-				}
-				else
-					Log.Error("Console", sLManager.GetConsoleWarningText("FaultyQuery"));
-			}
-			else if(Info.Length >= 2 && Info[1].ToLower() == "add")
-			{
-				if(Info.Length < 3)
-				{
-					Log.Error("Console", sLManager.GetConsoleWarningText("NoName"));
-					return;
-				}
-
-				var text = sLManager.GetConsoleCommandTexts("admin/add");
-				if(text.Length < 3)
-				{
-					Log.Error("Console", sLConsole.Translations("NoFound2"));
-					return;
-				}
-
-				string name = Info[2];
-				var db = SchumixBase.DManager.QueryFirstRow("SELECT* FROM admins WHERE Name = '{0}' And ServerName = '{1}'", name.ToLower(), _servername);
-				if(!db.IsNull())
-				{
-					Log.Warning("Console", text[0]);
-					return;
-				}
-
-				string pass = sUtilities.GetRandomString();
-				SchumixBase.DManager.Insert("`admins`(ServerId, ServerName, Name, Password)", IRCConfig.List[_servername].ServerId, _servername, name.ToLower(), sUtilities.Sha1(pass));
-
-				if(SchumixBase.DManager.IsCreatedTable("hlmessage"))
-					SchumixBase.DManager.Insert("`hlmessage`(ServerId, ServerName, Name, Enabled)", IRCConfig.List[_servername].ServerId, _servername, name.ToLower(), SchumixBase.Off);
-
-				Log.Notice("Console", text[1], name);
-				Log.Notice("Console", text[2], pass);
-			}
-			else if(Info.Length >= 2 && Info[1].ToLower() == "remove")
-			{
-				if(Info.Length < 3)
-				{
-					Log.Error("Console", sLManager.GetConsoleWarningText("NoName"));
-					return;
-				}
-
-				var text = sLManager.GetConsoleCommandTexts("admin/remove");
-				if(text.Length < 2)
-				{
-					Log.Error("Console", sLConsole.Translations("NoFound2"));
-					return;
-				}
-
-				string name = Info[2];
-				var db = SchumixBase.DManager.QueryFirstRow("SELECT* FROM admins WHERE Name = '{0}' And ServerName = '{1}'", name.ToLower(), _servername);
-				if(db.IsNull())
-				{
-					Log.Warning("Console", text[0]);
-					return;
-				}
-
-				SchumixBase.DManager.Delete("admins", string.Format("Name = '{0}' And ServerName = '{1}'", name.ToLower(), _servername));
-
-				if(SchumixBase.DManager.IsCreatedTable("hlmessage"))
-					SchumixBase.DManager.Delete("hlmessage", string.Format("Name = '{0}' And ServerName = '{1}'", name.ToLower(), _servername));
-
-				if(SchumixBase.DManager.IsCreatedTable("birthday"))
-				{
-					var db1 = SchumixBase.DManager.QueryFirstRow("SELECT * FROM birthday WHERE Name = '{0}' And ServerName = '{1}'", name.ToLower(), _servername);
-					if(!db1.IsNull())
-						SchumixBase.DManager.Delete("birthday", string.Format("Name = '{0}' And ServerName = '{1}'", name.ToLower(), _servername));
-				}
-
-				Log.Notice("Console", text[1], name);
-			}
-			else if(Info.Length >= 2 && Info[1].ToLower() == "rank")
-			{
-				if(Info.Length < 3)
-				{
-					Log.Error("Console", sLManager.GetConsoleWarningText("NoName"));
-					return;
-				}
-
-				if(Info.Length < 4)
-				{
-					Log.Error("Console", sLManager.GetConsoleWarningText("NoRank"));
-					return;
-				}
-
-				var text = sLManager.GetConsoleCommandTexts("admin/rank");
-				if(text.Length < 2)
-				{
-					Log.Error("Console", sLConsole.Translations("NoFound2"));
-					return;
-				}
-
-				string name = Info[2].ToLower();
-				int rank = Convert.ToInt32(Info[3]);
-
-				if((AdminFlag)rank == AdminFlag.Administrator || (AdminFlag)rank == AdminFlag.Operator || (AdminFlag)rank == AdminFlag.HalfOperator)
-				{
-					SchumixBase.DManager.Update("admins", string.Format("Flag = '{0}'", rank), string.Format("Name = '{0}' And ServerName = '{1}'", name, _servername));
-					Log.Notice("Console", text[0]);
-				}
-				else
-					Log.Error("Console", text[1]);
-			}
-			else
-				Log.Notice("Console", sLManager.GetConsoleCommandText("admin"));
 		}
 
 		/// <summary>
@@ -699,12 +538,6 @@ namespace Schumix.Console.Commands
 				if(!IsChannel(channel))
 				{
 					Log.Error("Console", sLManager.GetConsoleWarningText("NotaChannelHasBeenSet"));
-					return;
-				}
-
-				if(sIrcBase.Networks[_servername].sChannelNameList.Names.ContainsKey(Info[1].ToLower()))
-				{
-					Log.Error("Console", sLManager.GetConsoleWarningText("ImAlreadyOnThisChannel"));
 					return;
 				}
 
@@ -1115,12 +948,6 @@ namespace Schumix.Console.Commands
 				return;
 			}
 
-			if(sIrcBase.Networks[_servername].sChannelNameList.Names.ContainsKey(Info[1].ToLower()))
-			{
-				Log.Error("Console", sLManager.GetConsoleWarningText("ImAlreadyOnThisChannel"));
-				return;
-			}
-
 			if(Info.Length == 2)
 				sIrcBase.Networks[_servername].sSender.Join(Info[1]);
 			else if(Info.Length == 3)
@@ -1143,12 +970,6 @@ namespace Schumix.Console.Commands
 			if(!IsChannel(Info[1]))
 			{
 				Log.Error("Console", sLManager.GetConsoleWarningText("NotaChannelHasBeenSet"));
-				return;
-			}
-
-			if(!sIrcBase.Networks[_servername].sChannelNameList.Names.ContainsKey(Info[1].ToLower()))
-			{
-				Log.Error("Console", sLManager.GetConsoleWarningText("ImNotOnThisChannel"));
 				return;
 			}
 
@@ -1180,7 +1001,6 @@ namespace Schumix.Console.Commands
 			{
 				case "config":
 					new Config(SchumixConfig.ConfigDirectory, SchumixConfig.ConfigFile, SchumixConfig.ColorBindMode);
-					sIrcBase.Networks[_servername].ReloadMessageHandlerConfig();
 					sLConsole.Locale = LocalizationConfig.Locale;
 					i = 1;
 					break;
@@ -1190,167 +1010,12 @@ namespace Schumix.Console.Commands
 					break;
 			}
 
-			foreach(var plugin in sAddonManager.Addons[_servername].Addons)
-			{
-				if(plugin.Value.Reload(Info[1].ToLower()) == 1)
-					i = 1;
-				else if(plugin.Value.Reload(Info[1].ToLower()) == 0)
-					i = 0;
-			}
-
 			if(i == -1)
 				Log.Error("Console", text[0]);
 			else if(i == 0)
 				Log.Error("Console", text[1]);
 			else if(i == 1)
 				Log.Notice("Console", text[2], Info[1]);
-		}
-
-		/// <summary>
-		///     Plugin parancs függvénye.
-		/// </summary>
-		protected void HandlePlugin()
-		{
-			if(Info.Length >= 2 && Info[1].ToLower() == "load")
-			{
-				var text = sLManager.GetConsoleCommandTexts("plugin/load");
-				if(text.Length < 3)
-				{
-					Log.Error("Console", sLConsole.Translations("NoFound2"));
-					return;
-				}
-
-				if(sAddonManager.IsLoadingAddons())
-				{
-					Log.Error("Console", text[2]);
-					return;
-				}
-
-				if(sAddonManager.LoadPluginsFromDirectory(AddonsConfig.Directory))
-				{
-					foreach(var nw in sIrcBase.Networks)
-					{
-						var asms = sAddonManager.Addons[nw.Key].Assemblies.ToDictionary(v => v.Key, v => v.Value);
-						Parallel.ForEach(asms, asm =>
-						{
-							var types = asm.Value.GetTypes();
-							Parallel.ForEach(types, type =>
-							{
-								var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static);
-								Parallel.ForEach(methods, method =>
-								{
-									foreach(var attribute in Attribute.GetCustomAttributes(method))
-									{
-										if(attribute.IsOfType(typeof(IrcCommandAttribute)))
-										{
-											var attr = (IrcCommandAttribute)attribute;
-											lock(Lock)
-											{
-												var del = Delegate.CreateDelegate(typeof(IRCDelegate), method) as IRCDelegate;
-												sIrcBase.Networks[nw.Key].IrcRegisterHandler(attr.Command, del);
-											}
-										}
-
-										if(attribute.IsOfType(typeof(SchumixCommandAttribute)))
-										{
-											var attr = (SchumixCommandAttribute)attribute;
-											lock(Lock)
-											{
-												var del = Delegate.CreateDelegate(typeof(CommandDelegate), method) as CommandDelegate;
-												sIrcBase.Networks[nw.Key].SchumixRegisterHandler(attr.Command, del, attr.Permission);
-											}
-										}
-									}
-								});
-							});
-						});
-					}
-
-					Log.Notice("Console", text[0]);
-				}
-				else
-					Log.Error("Console", text[1]);
-			}
-			else if(Info.Length >= 2 && Info[1].ToLower() == "unload")
-			{
-				var text = sLManager.GetConsoleCommandTexts("plugin/unload");
-				if(text.Length < 3)
-				{
-					Log.Error("Console", sLConsole.Translations("NoFound2"));
-					return;
-				}
-
-				if(!sAddonManager.IsLoadingAddons())
-				{
-					Log.Error("Console", text[2]);
-					return;
-				}
-
-				if(sAddonManager.UnloadPlugins())
-				{
-					foreach(var nw in sIrcBase.Networks)
-					{
-						var asms = sAddonManager.Addons[nw.Key].Assemblies.ToDictionary(v => v.Key, v => v.Value);
-						Parallel.ForEach(asms, asm =>
-						{
-							var types = asm.Value.GetTypes();
-							Parallel.ForEach(types, type =>
-							{
-								var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static);
-								Parallel.ForEach(methods, method =>
-								{
-									foreach(var attribute in Attribute.GetCustomAttributes(method))
-									{
-										if(attribute.IsOfType(typeof(IrcCommandAttribute)))
-										{
-											var attr = (IrcCommandAttribute)attribute;
-											lock(Lock)
-											{
-												var del = Delegate.CreateDelegate(typeof(IRCDelegate), method) as IRCDelegate;
-												sIrcBase.Networks[nw.Key].IrcRemoveHandler(attr.Command, del);
-											}
-										}
-
-										if(attribute.IsOfType(typeof(SchumixCommandAttribute)))
-										{
-											var attr = (SchumixCommandAttribute)attribute;
-											lock(Lock)
-											{
-												var del = Delegate.CreateDelegate(typeof(CommandDelegate), method) as CommandDelegate;
-												sIrcBase.Networks[nw.Key].SchumixRemoveHandler(attr.Command, del);
-											}
-										}
-									}
-								});
-							});
-						});
-					}
-
-					Log.Notice("Console", text[0]);
-				}
-				else
-					Log.Error("Console", text[1]);
-			}
-			else
-			{
-				var text = sLManager.GetConsoleCommandTexts("plugin");
-				if(text.Length < 3)
-				{
-					Log.Error("Console", sLConsole.Translations("NoFound2"));
-					return;
-				}
-
-				string Plugins = string.Empty;
-
-				foreach(var plugin in sAddonManager.Addons[_servername].Addons)
-					Plugins += ", " + plugin.Value.Name;
-
-				if(Plugins != string.Empty)
-					Log.Notice("Console", text[0], Plugins.Remove(0, 2, ", "));
-
-				if(Plugins == string.Empty)
-					Log.Warning("Console", text[2]);
-			}
 		}
 
 		/// <summary>
