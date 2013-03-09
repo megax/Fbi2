@@ -812,18 +812,6 @@ namespace Schumix.Framework
 
 		public void CleanHomeDirectory(bool server = false)
 		{
-			if(File.Exists("Config.exe"))
-				File.Delete("Config.exe");
-
-			if(File.Exists("Installer.exe"))
-				File.Delete("Installer.exe");
-
-			if(File.Exists("xbuild.exe"))
-				File.Delete("xbuild.exe");
-
-			if(server)
-				return;
-
 			if(File.Exists(AddonsConfig.Directory + "/Schumix.db3"))
 				File.Delete(AddonsConfig.Directory + "/Schumix.db3");
 
@@ -835,9 +823,6 @@ namespace Schumix.Framework
 
 			if(File.Exists(AddonsConfig.Directory + "/MySql.Data.dll"))
 				File.Delete(AddonsConfig.Directory + "/MySql.Data.dll");
-
-			if(File.Exists(AddonsConfig.Directory + "/Schumix.Irc.dll"))
-				File.Delete(AddonsConfig.Directory + "/Schumix.Irc.dll");
 
 			if(File.Exists(AddonsConfig.Directory + "/Schumix.API.dll"))
 				File.Delete(AddonsConfig.Directory + "/Schumix.API.dll");
