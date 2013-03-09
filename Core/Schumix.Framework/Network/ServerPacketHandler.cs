@@ -134,7 +134,7 @@ namespace Schumix.Framework.Client
 			string message1 = pck.Read<string>();
 			string message2 = pck.Read<string>();
 
-			var sSendMessage = sIrcBase.Networks["yeahunter"].sSendMessage;
+			var sSendMessage = sIrcBase.Networks["default"].sSendMessage;
 			sSendMessage.SendCMPrivmsg("#fbi", "{0}", message1);
 			sSendMessage.SendCMPrivmsg("#fbi", "{0}", message2);
 		}
