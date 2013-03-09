@@ -33,7 +33,6 @@ namespace Schumix.Server.Config
 	sealed class XmlConfig : DefaultConfig
 	{
 		private readonly LocalizationConsole sLConsole = Singleton<LocalizationConsole>.Instance;
-		private readonly New.Schumix sSchumix = Singleton<New.Schumix>.Instance;
 		private readonly Utilities sUtilities = Singleton<Utilities>.Instance;
 
 		public XmlConfig()
@@ -81,28 +80,6 @@ namespace Schumix.Server.Config
 
 			if(!xmldoc.SelectSingleNode("Server/Schumixs/Enabled").IsNull() ? Convert.ToBoolean(xmldoc.SelectSingleNode("Server/Schumixs/Enabled").InnerText) : d_schumixsenabled)
 			{
-				Task.Factory.StartNew(() =>
-				{
-					Log.Notice("Schumix", sLConsole.Config("Text9"));
-
-					var xmlschumixlist = xmldoc.SelectNodes("Server/Schumixs/Schumix");
-					Log.Notice("Schumix", sLConsole.Config("Text10"), xmlschumixlist.Count);
-
-					if(xmlschumixlist.Count == 0)
-						Log.Warning("Schumix", sLConsole.Config("Text11"));
-					else
-					{
-						foreach(XmlNode xn in xmlschumixlist)
-						{
-							string file = !xn.SelectSingleNode("Config/File").IsNull() ? xn.SelectSingleNode("Config/File").InnerText : d_schumixfile;
-							string dir = !xn.SelectSingleNode("Config/Directory").IsNull() ? xn.SelectSingleNode("Config/Directory").InnerText : d_schumixdirectory;
-							string ce = !xn.SelectSingleNode("Config/ConsoleEncoding").IsNull() ? xn.SelectSingleNode("Config/ConsoleEncoding").InnerText : d_schumixconsoleencoding;
-							string lo = !xn.SelectSingleNode("Config/Locale").IsNull() ? xn.SelectSingleNode("Config/Locale").InnerText : d_schumixlocale;
-							sSchumix.Start(file, dir, ce, lo, sUtilities.GetRandomString());
-							Thread.Sleep(10*1000);
-						}
-					}
-				});
 			}
 			else
 				Log.Warning("Schumix", sLConsole.Config("Text11"));

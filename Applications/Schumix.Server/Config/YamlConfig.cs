@@ -35,7 +35,6 @@ namespace Schumix.Server.Config
 	sealed class YamlConfig : DefaultConfig
 	{
 		private readonly LocalizationConsole sLConsole = Singleton<LocalizationConsole>.Instance;
-		private readonly New.Schumix sSchumix = Singleton<New.Schumix>.Instance;
 		private readonly Utilities sUtilities = Singleton<Utilities>.Instance;
 		private readonly Dictionary<YamlNode, YamlNode> NullYMap = null;
 
@@ -208,32 +207,7 @@ namespace Schumix.Server.Config
 		{
 			if((!nodes.IsNull() && nodes.ContainsKey("Enabled")) ? Convert.ToBoolean(nodes["Enabled".ToYamlNode()].ToString()) : d_schumixsenabled)
 			{
-				Task.Factory.StartNew(() =>
-				{
-					Log.Notice("Schumix", sLConsole.Config("Text9"));
-					Log.Notice("Schumix", sLConsole.Config("Text10"), nodes.Count-1);
 
-					foreach(var maps in nodes)
-					{
-						if(maps.Key.ToString().Contains("Schumix"))
-						{
-							var node = ((YamlMappingNode)maps.Value).Children;
-
-							if(!node.IsNull() && node.ContainsKey("Config"))
-							{
-								var node2 = ((YamlMappingNode)node["Config".ToYamlNode()]).Children;
-								string file = (!node2.IsNull() && node2.ContainsKey("File")) ? node2["File".ToYamlNode()].ToString() : d_schumixfile;
-								string dir = (!node2.IsNull() && node2.ContainsKey("Directory")) ? node2["Directory".ToYamlNode()].ToString() : d_schumixdirectory;
-								string ce = (!node2.IsNull() && node2.ContainsKey("ConsoleEncoding")) ? node2["ConsoleEncoding".ToYamlNode()].ToString() : d_schumixconsoleencoding;
-								string lo = (!node2.IsNull() && node2.ContainsKey("Locale")) ? node2["Locale".ToYamlNode()].ToString() : d_schumixlocale;
-								sSchumix.Start(file, dir, ce, lo, sUtilities.GetRandomString());
-								Thread.Sleep(10*1000);
-							}
-							else
-								Log.Warning("Schumix", sLConsole.Config("Text11"));
-						}
-					}
-				});
 			}
 			else
 				Log.Warning("Schumix", sLConsole.Config("Text11"));

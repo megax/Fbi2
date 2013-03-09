@@ -37,7 +37,6 @@ namespace Schumix.Server
 {
 	class MainClass
 	{
-		private static readonly ServerPacketHandler sServerPacketHandler = Singleton<ServerPacketHandler>.Instance;
 		private static readonly LocalizationConsole sLConsole = Singleton<LocalizationConsole>.Instance;
 		private static readonly CrashDumper sCrashDumper = Singleton<CrashDumper>.Instance;
 		private static readonly Utilities sUtilities = Singleton<Utilities>.Instance;
@@ -45,7 +44,6 @@ namespace Schumix.Server
 		private static readonly Windows sWindows = Singleton<Windows>.Instance;
 		private static readonly Linux sLinux = Singleton<Linux>.Instance;
 		public static CleanManager sCleanManager { get; private set; }
-		public static ServerListener sListener { get; private set; }
 
 		/// <summary>
 		///     A Main függvény. Itt indul el a program.
@@ -145,15 +143,6 @@ namespace Schumix.Server
 
 			Log.Notice("Main", sLConsole.MainText("StartText3"));
 
-			if(colorbindmode)
-				Log.Notice("Main", sLConsole.MainText("StartText6"));
-
-			Log.Debug("Main", sLConsole.MainText("StartText5"));
-			sCleanManager = new CleanManager(true);
-			sCleanManager.Initialize();
-
-			sUtilities.CleanHomeDirectory(true);
-
 			if(sUtilities.GetPlatformType() == PlatformType.Windows)
 				sWindows.Init();
 			else if(sUtilities.GetPlatformType() == PlatformType.Linux)
@@ -161,19 +150,23 @@ namespace Schumix.Server
 
 			AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
 			{
-				if(sListener.Exit)
-				{
-					Log.LargeError(sLConsole.Exception("FatalError"));
-					Log.Error("Main", sLConsole.MainText("StartText4"), eventArgs.ExceptionObject as Exception);
-					sCrashDumper.CreateCrashDump(eventArgs.ExceptionObject);
-					Process.GetCurrentProcess().Kill();
-				}
-				else
-					Shutdown(eventArgs.ExceptionObject as Exception);
+				Shutdown(eventArgs.ExceptionObject as Exception);
 			};
 
-			sListener = new ServerListener(ServerConfigs.ListenerPort);
-			sListener.Listen();
+			var listener = new ClientSocket("127.0.0.1", 35220, "schumix");
+			listener.Socket();
+
+			Thread.Sleep(10*1000);
+
+			for(;;)
+			{
+				var packet = new SchumixPacket();
+				packet.Write<int>((int)Opcode.CMSG_REQUEST_TEST);
+				packet.Write<string>("Ez az első üzenet.");
+				packet.Write<string>("Ez meg a második üzenet.");
+				ClientSocket.SendPacketToSCS(packet);
+				Thread.Sleep(5*1000);
+			}
 		}
 
 		/// <summary>
@@ -194,7 +187,6 @@ namespace Schumix.Server
 		public static void Shutdown(Exception eventArgs = null)
 		{
 			sUtilities.RemovePidFile();
-			sListener.Exit = true;
 			System.Console.CursorVisible = true;
 
 			if(!eventArgs.IsNull())
@@ -203,14 +195,6 @@ namespace Schumix.Server
 				sCrashDumper.CreateCrashDump(eventArgs);
 			}
 
-			var packet = new SchumixPacket();
-			packet.Write<int>((int)Opcode.SMSG_CLOSE_CONNECTION);
-			packet.Write<int>((int)0);
-
-			foreach(var list in sServerPacketHandler.HostList)
-				sServerPacketHandler.SendPacketBack(packet, list.Value, list.Key.Split(SchumixBase.Colon)[0], Convert.ToInt32(list.Key.Split(SchumixBase.Colon)[1]));
-
-			Thread.Sleep(2000);
 			Process.GetCurrentProcess().Kill();
 		}
 	}

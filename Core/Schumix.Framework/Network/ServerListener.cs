@@ -28,14 +28,13 @@ using Schumix.Framework.Client;
 using Schumix.Framework.Extensions;
 using Schumix.Framework.Localization;
 
-namespace Schumix.Server
+namespace Schumix.Framework.Client
 {
-	sealed class ServerListener : IDisposable
+	public sealed class ServerListener : IDisposable
 	{
 		private readonly ServerPacketHandler sServerPacketHandler = Singleton<ServerPacketHandler>.Instance;
 		private readonly LocalizationConsole sLConsole = Singleton<LocalizationConsole>.Instance;
 		private readonly TcpListener _listener;
-		public bool Exit = false;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Schumix.Server.ServerListener"/> class.
@@ -75,21 +74,21 @@ namespace Schumix.Server
 			while(true)
 			{
 				bytes_read = 0;
-				
+
 				// read
 				if(stream.DataAvailable && stream.CanRead)
 				{
 					Log.Debug("ClientHandler", sLConsole.ServerListener("Text4"));
 					bytes_read = stream.Read(message_buffer, 0, message_buffer.Length);
+
+					if(SchumixBase.ExitStatus)
+						return;
 					
 					if(bytes_read == 0)
 					{
 						Log.Warning("ClientHandler", sLConsole.ServerListener("Text5"));
 						break;
 					}
-
-					if(Exit)
-						return;
 
 					var encoding = new UTF8Encoding();
 					var msg = encoding.GetString(message_buffer, 0, bytes_read);
@@ -106,8 +105,6 @@ namespace Schumix.Server
 		
 		public void Dispose()
 		{
-			Exit = true;
-
 			if(!_listener.IsNull())
 				_listener.Stop();
 		}

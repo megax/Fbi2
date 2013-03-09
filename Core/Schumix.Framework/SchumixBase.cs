@@ -46,13 +46,12 @@ namespace Schumix.Framework
 		private static readonly Guid _guid = Guid.NewGuid();
 		public static CleanManager sCleanManager { get; private set; }
 		public static DatabaseManager DManager { get; private set; }
+		public static ServerListener sListener { get; private set; }
 		public static CacheDB sCacheDB { get; private set; }
 		public static Timer timer { get; private set; }
-		public const string Title = "Schumix2 IRC Bot and Framework";
+		public const string Title = "FBI IRC Bot and Framework";
 		public static bool ExitStatus { get; private set; }
-		public static string ServerIdentify = string.Empty;
 		public static bool UrlTitleEnabled = false;
-		public static bool ThreadStop = true;
 		public static bool NewNick = false;
 		public static bool STime = true;
 		public const string On = "on";
@@ -77,12 +76,14 @@ namespace Schumix.Framework
 
 				if(ServerConfig.Enabled)
 				{
-					var listener = new ClientSocket(ServerConfig.Host, ServerConfig.Port, ServerConfig.Password);
-					Log.Debug("SchumixServer", sLConsole.SchumixBase("Text6"));
-					listener.Socket();
+					sListener = new ServerListener(ServerConfig.Port);
+					new Thread(() => sListener.Listen()).Start();
+					//var listener = new ClientSocket(ServerConfig.Host, ServerConfig.Port, ServerConfig.Password);
+					//Log.Debug("SchumixServer", sLConsole.SchumixBase("Text6"));
+					//listener.Socket();
 
-					while(ThreadStop)
-						Thread.Sleep(100);
+					//while(ThreadStop)
+					//	Thread.Sleep(100);
 				}
 
 				if(sUtilities.GetPlatformType() == PlatformType.Linux)
@@ -208,7 +209,7 @@ namespace Schumix.Framework
 			if(!ServerConfig.Enabled)
 				return;
 
-			var packet = new SchumixPacket();
+			/*var packet = new SchumixPacket();
 			packet.Write<int>((int)Opcode.CMSG_CLOSE_CONNECTION);
 			packet.Write<string>(_guid.ToString());
 			packet.Write<string>(SchumixConfig.ConfigFile);
@@ -217,7 +218,7 @@ namespace Schumix.Framework
 			packet.Write<string>(LocalizationConfig.Locale);
 			packet.Write<string>(Reconnect.ToString());
 			packet.Write<string>(ServerIdentify);
-			ClientSocket.SendPacketToSCS(packet);
+			ClientSocket.SendPacketToSCS(packet);*/
 		}
 
 		public static void Quit(bool Reconnect = true)

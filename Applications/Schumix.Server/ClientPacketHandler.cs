@@ -44,10 +44,6 @@ namespace Schumix.Framework.Client
 		/// Occurs when auth is approved.
 		/// </summary>
 		public event ClientPacketHandlerDelegate OnAuthApproved;
-		/// <summary>
-		/// Occurs when SCS sends a random number packet back.
-		/// </summary>
-		public event ClientPacketHandlerDelegate OnScsRandom;
 		public event ClientPacketHandlerDelegate OnCloseConnection;
 		private ClientPacketHandler() {}
 
@@ -58,7 +54,6 @@ namespace Schumix.Framework.Client
 		{
 			OnAuthApproved    += AuthApprovedHandler;
 			OnAuthDenied      += AuthDeniedHandler;
-			OnScsRandom       += ScsRandHandler;
 			OnCloseConnection += CloseHandler;
 		}
 
@@ -81,8 +76,6 @@ namespace Schumix.Framework.Client
 				OnAuthDenied(packet, hst);
 			else if(packetid == (int)Opcode.SMSG_AUTH_APPROVED)
 				OnAuthApproved(packet, hst);
-			else if(packetid == (int)Opcode.SMSG_SEND_SCS_RANDOM)
-				OnScsRandom(packet, hst);
 			else if(packetid == (int)Opcode.SMSG_CLOSE_CONNECTION)
 				OnCloseConnection(packet, hst);
 		}
@@ -117,29 +110,6 @@ namespace Schumix.Framework.Client
 		public void AuthApprovedHandler(SchumixPacket pck, string hst)
 		{
 			Log.Success("SchumixServer", sLConsole.ClientPacketHandler("Text5"));
-			SchumixBase.ThreadStop = false;
-		}
-
-		/// <summary>
-		/// The SCS Random number handler. (SMSG_SEND_SCS_RANDOM)
-		/// </summary>
-		/// <param name='pck'>
-		/// Packet.
-		/// </param>
-		/// <param name='hst'>
-		/// Host.
-		/// </param>
-		public void ScsRandHandler(SchumixPacket pck, string hst)
-		{
-			// read random value.
-			//var rand = pck.Read<int>();
-			// read channel
-			//var chan = pck.Read<string>();
-			//var sBot = Singleton<AlarisBot>.Instance;
-			//if(string.IsNullOrEmpty(chan) || chan == "0")
-			//	chan = sBot.acs_rand_request_channel;
-
-			//sBot.SendMsg(chan, "SCS sent random: " + rand.ToString());
 		}
 
 		private void CloseHandler(SchumixPacket pck, string hst)

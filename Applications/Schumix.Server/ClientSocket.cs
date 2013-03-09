@@ -71,7 +71,6 @@ namespace Schumix.Framework.Client
 			packet.Write<int>((int)Opcode.CMSG_REQUEST_AUTH);
 			packet.Write<string>(SchumixBase.GetGuid().ToString());
 			packet.Write<string>(sUtilities.Md5(_password));
-			packet.Write<string>(SchumixBase.ServerIdentify);
 			SendPacketToSCS(packet);
 		}
 		
@@ -84,6 +83,7 @@ namespace Schumix.Framework.Client
 		public void ClientHandler(object ob)
 		{
 			client = (ob as TcpClient);
+			Console.WriteLine(client.Connected);
 			stream = client.GetStream();
 			byte[] message_buffer = new byte[262144];
 			int bytes_read;
@@ -98,9 +98,6 @@ namespace Schumix.Framework.Client
 				{
 					Log.Debug("ClientHandler", sLConsole.ClientSocket("Text4"));
 					bytes_read = stream.Read(message_buffer, 0, message_buffer.Length);
-
-					if(SchumixBase.ExitStatus)
-						return;
 
 					if(bytes_read == 0)
 					{
@@ -138,9 +135,6 @@ namespace Schumix.Framework.Client
 		/// </param>
 		public static void SendPacketToSCS(SchumixPacket packet)
 		{
-			if(!ServerConfig.Enabled)
-				return;
-
 			try
 			{
 				if(client.Connected)

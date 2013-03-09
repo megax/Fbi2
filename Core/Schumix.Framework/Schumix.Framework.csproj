@@ -90,10 +90,8 @@
     <Compile Include="Extensions\GeneralExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
-    <Compile Include="Network\ClientPacketHandler.cs" />
     <Compile Include="Network\Opcodes.cs" />
     <Compile Include="Network\SchumixPacket.cs" />
-    <Compile Include="Network\ClientSocket.cs" />
     <Compile Include="Runtime.cs" />
     <Compile Include="CrashDumper.cs" />
     <Compile Include="PlatformType.cs" />
@@ -112,7 +110,6 @@
     <Compile Include="Addon\AddonBase.cs" />
     <Compile Include="Config\XmlConfig.cs" />
     <Compile Include="Config\YamlConfig.cs" />
-    <Compile Include="Network\ClientPacketHandlerDelegate.cs" />
     <Compile Include="Config\CrashConfig.cs" />
     <Compile Include="Config\ShutdownConfig.cs" />
     <Compile Include="Database\Cache\CacheDB.cs" />
@@ -154,6 +151,9 @@
     <Compile Include="PublicMessageHandler.cs" />
     <Compile Include="ReplyCode.cs" />
     <Compile Include="Config\CleanConfig.cs" />
+    <Compile Include="Network\ServerListener.cs" />
+    <Compile Include="Network\ServerPacketHandler.cs" />
+    <Compile Include="Network\ServerPacketHandlerDelegate.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

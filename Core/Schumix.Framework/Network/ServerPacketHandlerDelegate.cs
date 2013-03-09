@@ -21,7 +21,7 @@ using System;
 using System.Net.Sockets;
 using Schumix.Framework.Client;
 
-namespace Schumix.Server
+namespace Schumix.Framework.Client
 {
 	delegate void ServerPacketHandlerDelegate(SchumixPacket packet, NetworkStream stream, string hst, int bck);
 }
