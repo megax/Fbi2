@@ -136,7 +136,7 @@ namespace Schumix.Server
 			packet.Write<string>(message1);
 			packet.Write<string>(message2);
 			ClientSocket.SendPacketToSCS(packet);
-
+			
 			// Close
 			var packet2 = new SchumixPacket();
 			packet2.Write<int>((int)Opcode.CMSG_CLOSE_CONNECTION);
