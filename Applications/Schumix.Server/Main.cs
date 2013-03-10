@@ -66,7 +66,6 @@ namespace Schumix.Server
 					Help();
 					return;
 				}
-
 				else if(arg.Contains("--host="))
 				{
 					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
