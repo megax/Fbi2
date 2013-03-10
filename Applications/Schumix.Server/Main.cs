@@ -94,8 +94,8 @@ namespace Schumix.Server
 
 			Thread.Sleep(5*1000);
 
-			for(;;)
-			{
+			//for(;;)
+			//{
 				Console.WriteLine("Üzenet küldése...");
 				var packet = new SchumixPacket();
 				packet.Write<int>((int)Opcode.CMSG_REQUEST_TEST);
@@ -103,8 +103,8 @@ namespace Schumix.Server
 				packet.Write<string>(args[1]);
 				ClientSocket.SendPacketToSCS(packet);
 				Console.WriteLine("Üzenet elküldve.");
-				Thread.Sleep(10*1000);
-			}
+				//Thread.Sleep(10*1000);
+			//}
 		}
 
 		/// <summary>
