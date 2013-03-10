@@ -40,6 +40,7 @@ namespace Schumix.Framework.Client
 		private static NetworkStream stream;
 		private static TcpClient client;
 		private string _password;
+		private bool isclose;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Alaris.Core.ClientListener"/> class.
@@ -49,6 +50,7 @@ namespace Schumix.Framework.Client
 		/// </param>
 		public ClientSocket(string host, int port, string password)
 		{
+			isclose = false;
 			_password = password;
 			client = new TcpClient();
 			client.Connect(host, port);
@@ -87,7 +89,7 @@ namespace Schumix.Framework.Client
 			int bytes_read;
 			//Log.Notice("ClientHandler", sLConsole.ClientSocket("Text3"));
 
-			while(true)
+			while(!isclose)
 			{
 				bytes_read = 0;
 
@@ -114,6 +116,14 @@ namespace Schumix.Framework.Client
 
 			//Log.Warning("ClientHandler", sLConsole.ClientSocket("Text6"));
 			Environment.Exit(1);
+		}
+
+		public void Close()
+		{
+			isclose = true;
+
+			if(!client.IsNull())
+				client.Close();
 		}
 
 		public void Dispose()

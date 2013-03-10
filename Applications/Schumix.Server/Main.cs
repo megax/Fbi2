@@ -51,6 +51,9 @@ namespace Schumix.Server
 			sRuntime.SetProcessName("Cliens");
 			System.Console.BackgroundColor = ConsoleColor.Black;
 			System.Console.ForegroundColor = ConsoleColor.Gray;
+			string host = "127.0.0.1";
+			int port = 35220;
+			string pass = "schumix";
 
 			for(int i = 0; i < args.Length; i++)
 			{
@@ -60,6 +63,27 @@ namespace Schumix.Server
 				{
 					Help();
 					return;
+				}
+				else if(arg.Contains("--host="))
+				{
+					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
+						host = arg.Substring(arg.IndexOf("=")+1);
+					
+					continue;
+				}
+				else if(arg.Contains("--port="))
+				{
+					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
+						port = Convert.ToInt32(arg.Substring(arg.IndexOf("=")+1));
+					
+					continue;
+				}
+				else if(arg.Contains("--password="))
+				{
+					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
+						pass = arg.Substring(arg.IndexOf("=")+1);
+					
+					continue;
 				}
 			}
 
@@ -87,20 +111,25 @@ namespace Schumix.Server
 				Shutdown(eventArgs.ExceptionObject as Exception);
 			};
 
-			var listener = new ClientSocket("127.0.0.1", 35220, "schumix");
+			var listener = new ClientSocket(host, port, pass);
 			listener.Socket();
+			Thread.Sleep(500);
 
-			Thread.Sleep(5*1000);
-
-			Console.WriteLine("Üzenet küldése...");
 			var packet = new SchumixPacket();
 			packet.Write<int>((int)Opcode.CMSG_REQUEST_TEST);
 			packet.Write<string>(args[0]);
 			packet.Write<string>(args[1]);
 			ClientSocket.SendPacketToSCS(packet);
-			Console.WriteLine("Üzenet elküldve.");
+
+			// Close
+			var packet2 = new SchumixPacket();
+			packet2.Write<int>((int)Opcode.CMSG_CLOSE_CONNECTION);
+			packet2.Write<string>(SchumixBase.GetGuid().ToString());
+			ClientSocket.SendPacketToSCS(packet2);
 			Thread.Sleep(1000);
-			Shutdown();
+			listener.Close();
+			listener.Dispose();
+			//Shutdown();
 		}
 
 		/// <summary>
