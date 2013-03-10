@@ -146,7 +146,6 @@ namespace Schumix.Server
 			listener.Close();
 			listener.Dispose();
 			Environment.Exit(0);
-			//Shutdown();
 		}
 
 		/// <summary>
