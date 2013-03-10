@@ -54,8 +54,14 @@ namespace Schumix.Server
 			string host = "127.0.0.1";
 			int port = 35220;
 			string password = "schumix";
-			string message1 = string.Empty;
-			string message2 = string.Empty;
+			string message = string.Empty;
+			string project = string.Empty;
+			string refname = string.Empty;
+			string rev = string.Empty;
+			string author = string.Empty;
+			string url = string.Empty;
+			string channels = string.Empty;
+			string ircserver = string.Empty;
 
 			for(int i = 0; i < args.Length; i++)
 			{
@@ -87,17 +93,59 @@ namespace Schumix.Server
 					
 					continue;
 				}
-				else if(arg.Contains("--message1="))
+				else if(arg.Contains("--project="))
 				{
 					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
-						message1 = arg.Substring(arg.IndexOf("=")+1);
+						project = arg.Substring(arg.IndexOf("=")+1);
 					
 					continue;
 				}
-				else if(arg.Contains("--message2="))
+				else if(arg.Contains("--author="))
 				{
 					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
-						message2 = arg.Substring(arg.IndexOf("=")+1);
+						author = arg.Substring(arg.IndexOf("=")+1);
+					
+					continue;
+				}
+				else if(arg.Contains("--url="))
+				{
+					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
+						url = arg.Substring(arg.IndexOf("=")+1);
+					
+					continue;
+				}
+				else if(arg.Contains("--refname="))
+				{
+					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
+						refname = arg.Substring(arg.IndexOf("=")+1);
+					
+					continue;
+				}
+				else if(arg.Contains("--rev="))
+				{
+					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
+						rev = arg.Substring(arg.IndexOf("=")+1);
+					
+					continue;
+				}
+				else if(arg.Contains("--channels="))
+				{
+					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
+						channels = arg.Substring(arg.IndexOf("=")+1);
+					
+					continue;
+				}
+				else if(arg.Contains("--ircserver="))
+				{
+					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
+						ircserver = arg.Substring(arg.IndexOf("=")+1);
+					
+					continue;
+				}
+				else if(arg.Contains("--message="))
+				{
+					if(arg.Substring(arg.IndexOf("--message=") + "--message=".Length) != string.Empty)
+						message = arg.Substring(arg.IndexOf("--message=") + "--message=".Length);
 					
 					continue;
 				}
@@ -133,8 +181,14 @@ namespace Schumix.Server
 
 			var packet = new SchumixPacket();
 			packet.Write<int>((int)Opcode.CMSG_REQUEST_TEST);
-			packet.Write<string>(message1);
-			packet.Write<string>(message2);
+			packet.Write<string>(project);
+			packet.Write<string>(refname);
+			packet.Write<string>(rev);
+			packet.Write<string>(author);
+			packet.Write<string>(url);
+			packet.Write<string>(channels);
+			packet.Write<string>(ircserver);
+			packet.Write<string>(message);
 			ClientSocket.SendPacketToSCS(packet);
 			
 			// Close

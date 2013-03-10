@@ -124,19 +124,30 @@ namespace Schumix.Framework.Client
 				_AuthList.Remove(hst + SchumixBase.Colon + bck);
 
 			string guid = pck.Read<string>();
-
 			Log.Warning("CloseHandler", sLConsole.ServerPacketHandler("Text6"), guid);
-			Log.Notice("CloseHandler", sLConsole.ServerPacketHandler("Text7"));
+			//Log.Notice("CloseHandler", sLConsole.ServerPacketHandler("Text7"));
 		}
 
 		private void TestHandler(SchumixPacket pck, NetworkStream stream, string hst, int bck)
 		{
-			string message1 = pck.Read<string>();
-			string message2 = pck.Read<string>();
+			string project = pck.Read<string>();
+			string refname = pck.Read<string>();
+			string rev = pck.Read<string>();
+			string author = pck.Read<string>();
+			string url = pck.Read<string>();
+			string channels = pck.Read<string>();
+			string ircserver = pck.Read<string>();
+			string message = pck.Read<string>();
 
 			var sSendMessage = sIrcBase.Networks["default"].sSendMessage;
-			sSendMessage.SendCMPrivmsg("#fbi", "{0}", message1);
-			sSendMessage.SendCMPrivmsg("#fbi", "{0}", message2);
+			sSendMessage.SendCMPrivmsg("#fbi", "{0}", project);
+			sSendMessage.SendCMPrivmsg("#fbi", "{0}", refname);
+			sSendMessage.SendCMPrivmsg("#fbi", "{0}", rev);
+			sSendMessage.SendCMPrivmsg("#fbi", "{0}", author);
+			sSendMessage.SendCMPrivmsg("#fbi", "{0}", url);
+			sSendMessage.SendCMPrivmsg("#fbi", "{0}", channels);
+			sSendMessage.SendCMPrivmsg("#fbi", "{0}", ircserver);
+			sSendMessage.SendCMPrivmsg("#fbi", "{0}", message);
 		}
 
 		public void SendPacketBack(SchumixPacket packet, NetworkStream stream, string hst, int backport)
