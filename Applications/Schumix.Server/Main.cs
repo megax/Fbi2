@@ -103,6 +103,8 @@ namespace Schumix.Server
 				packet.Write<string>(args[1]);
 				ClientSocket.SendPacketToSCS(packet);
 				Console.WriteLine("Üzenet elküldve.");
+				Thread.Sleep(1000);
+				Shutdown();
 				//Thread.Sleep(10*1000);
 			//}
 		}
