@@ -138,8 +138,8 @@ namespace Schumix.Framework.Client
 			string channels = pck.Read<string>();
 			string ircserver = pck.Read<string>();
 			string message = pck.Read<string>();
-			ircserver = ircserver.ToLower();
 
+			ircserver = ircserver.ToLower();
 			if(!sIrcBase.Networks.ContainsKey(ircserver))
 				return;
 
