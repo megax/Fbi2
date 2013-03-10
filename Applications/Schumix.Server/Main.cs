@@ -54,6 +54,8 @@ namespace Schumix.Server
 			string host = "127.0.0.1";
 			int port = 35220;
 			string password = "schumix";
+			string message1 = string.Empty;
+			string message2 = string.Empty;
 
 			for(int i = 0; i < args.Length; i++)
 			{
@@ -83,6 +85,20 @@ namespace Schumix.Server
 				{
 					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
 						password = arg.Substring(arg.IndexOf("=")+1);
+					
+					continue;
+				}
+				else if(arg.Contains("--message1="))
+				{
+					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
+						message1 = arg.Substring(arg.IndexOf("=")+1);
+					
+					continue;
+				}
+				else if(arg.Contains("--message2="))
+				{
+					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
+						message2 = arg.Substring(arg.IndexOf("=")+1);
 					
 					continue;
 				}
@@ -118,8 +134,8 @@ namespace Schumix.Server
 
 			var packet = new SchumixPacket();
 			packet.Write<int>((int)Opcode.CMSG_REQUEST_TEST);
-			packet.Write<string>(args[0]);
-			packet.Write<string>(args[1]);
+			packet.Write<string>(message1);
+			packet.Write<string>(message2);
 			ClientSocket.SendPacketToSCS(packet);
 
 			// Close
