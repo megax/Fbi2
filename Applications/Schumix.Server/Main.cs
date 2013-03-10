@@ -97,8 +97,8 @@ namespace Schumix.Server
 				Console.WriteLine("Üzenet küldése...");
 				var packet = new SchumixPacket();
 				packet.Write<int>((int)Opcode.CMSG_REQUEST_TEST);
-				packet.Write<string>("Ez az első üzenet.");
-				packet.Write<string>(string.Format("Ez meg a második üzenet. Idő: {0}", DateTime.Now));
+				packet.Write<string>(args[0]);
+				packet.Write<string>(args[1]);
 				ClientSocket.SendPacketToSCS(packet);
 				Console.WriteLine("Üzenet elküldve.");
 				Thread.Sleep(10*1000);
