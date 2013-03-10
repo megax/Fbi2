@@ -53,7 +53,7 @@ namespace Schumix.Server
 			System.Console.ForegroundColor = ConsoleColor.Gray;
 			string host = "127.0.0.1";
 			int port = 35220;
-			string pass = "schumix";
+			string password = "schumix";
 
 			for(int i = 0; i < args.Length; i++)
 			{
@@ -81,7 +81,7 @@ namespace Schumix.Server
 				else if(arg.Contains("--password="))
 				{
 					if(arg.Substring(arg.IndexOf("=")+1) != string.Empty)
-						pass = arg.Substring(arg.IndexOf("=")+1);
+						password = arg.Substring(arg.IndexOf("=")+1);
 					
 					continue;
 				}
@@ -111,7 +111,7 @@ namespace Schumix.Server
 				Shutdown(eventArgs.ExceptionObject as Exception);
 			};
 
-			var listener = new ClientSocket(host, port, pass);
+			var listener = new ClientSocket(host, port, password);
 			listener.Socket();
 			Thread.Sleep(500);
 
