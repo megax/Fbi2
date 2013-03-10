@@ -103,17 +103,17 @@ namespace Schumix.Server
 				}
 			}
 
-			System.Console.Title = "FBI Test Cliens";
-			System.Console.ForegroundColor = ConsoleColor.Blue;
-			System.Console.WriteLine("[Cliens]");
-			System.Console.WriteLine(sLConsole.MainText("StartText"));
-			System.Console.WriteLine(sLConsole.MainText("StartText2"), sUtilities.GetVersion());
-			System.Console.WriteLine(sLConsole.MainText("StartText2-2"), Consts.SchumixWebsite);
-			System.Console.WriteLine(sLConsole.MainText("StartText2-3"), Consts.SchumixProgrammedBy);
-			System.Console.WriteLine(sLConsole.MainText("StartText2-4"), Consts.SchumixDevelopers);
-			System.Console.WriteLine("================================================================================"); // 80
-			System.Console.ForegroundColor = ConsoleColor.Gray;
-			System.Console.WriteLine();
+			//System.Console.Title = "FBI Test Cliens";
+			//System.Console.ForegroundColor = ConsoleColor.Blue;
+			//System.Console.WriteLine("[Cliens]");
+			//System.Console.WriteLine(sLConsole.MainText("StartText"));
+			//System.Console.WriteLine(sLConsole.MainText("StartText2"), sUtilities.GetVersion());
+			//System.Console.WriteLine(sLConsole.MainText("StartText2-2"), Consts.SchumixWebsite);
+			//System.Console.WriteLine(sLConsole.MainText("StartText2-3"), Consts.SchumixProgrammedBy);
+			//System.Console.WriteLine(sLConsole.MainText("StartText2-4"), Consts.SchumixDevelopers);
+			//System.Console.WriteLine("================================================================================"); // 80
+			//System.Console.ForegroundColor = ConsoleColor.Gray;
+			//System.Console.WriteLine();
 
 			//Log.Notice("Main", sLConsole.MainText("StartText3"));
 
