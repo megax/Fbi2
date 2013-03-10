@@ -53,7 +53,7 @@ namespace Schumix.Server
 			System.Console.ForegroundColor = ConsoleColor.Gray;
 			string host = "127.0.0.1";
 			int port = 35220;
-			string password = "schumix";
+			string password = "AbasslUIO883jHHG";
 			string message1 = string.Empty;
 			string message2 = string.Empty;
 
@@ -133,8 +133,8 @@ namespace Schumix.Server
 
 			var packet = new SchumixPacket();
 			packet.Write<int>((int)Opcode.CMSG_REQUEST_TEST);
-			packet.Write<string>(message1);
-			packet.Write<string>(message2);
+			packet.Write<string>(args[0]);
+			packet.Write<string>(args[1]);
 			ClientSocket.SendPacketToSCS(packet);
 
 			// Close
