@@ -92,19 +92,15 @@ namespace Schumix.Server
 
 			Thread.Sleep(5*1000);
 
-			//for(;;)
-			//{
-				Console.WriteLine("Üzenet küldése...");
-				var packet = new SchumixPacket();
-				packet.Write<int>((int)Opcode.CMSG_REQUEST_TEST);
-				packet.Write<string>(args[0]);
-				packet.Write<string>(args[1]);
-				ClientSocket.SendPacketToSCS(packet);
-				Console.WriteLine("Üzenet elküldve.");
-				Thread.Sleep(1000);
-				Shutdown();
-				//Thread.Sleep(10*1000);
-			//}
+			Console.WriteLine("Üzenet küldése...");
+			var packet = new SchumixPacket();
+			packet.Write<int>((int)Opcode.CMSG_REQUEST_TEST);
+			packet.Write<string>(args[0]);
+			packet.Write<string>(args[1]);
+			ClientSocket.SendPacketToSCS(packet);
+			Console.WriteLine("Üzenet elküldve.");
+			Thread.Sleep(1000);
+			Shutdown();
 		}
 
 		/// <summary>
