@@ -93,7 +93,7 @@ namespace Schumix.Server
 			listener.Socket();
 
 			Thread.Sleep(5*1000);
-					
+
 			for(;;)
 			{
 				Console.WriteLine("Üzenet küldése...");
