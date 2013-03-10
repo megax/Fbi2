@@ -114,7 +114,7 @@ namespace Schumix.Server
 			System.Console.WriteLine("Options:");
 			System.Console.WriteLine("\t-h, --help\t\t\tShow help");
 		}
-
+ 
 		public static void Shutdown(Exception eventArgs = null)
 		{
 			if(!eventArgs.IsNull())
