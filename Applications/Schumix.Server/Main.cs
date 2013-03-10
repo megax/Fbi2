@@ -148,7 +148,6 @@ namespace Schumix.Server
 						message = arg.Substring(arg.IndexOf("--message=") + "--message=".Length);
 
 					Console.WriteLine(message);
-					
 					continue;
 				}
 			}
