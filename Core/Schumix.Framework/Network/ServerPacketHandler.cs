@@ -156,7 +156,7 @@ namespace Schumix.Framework.Client
 				sSender.Join(chan);
 
 			sSendMessage.SendCMPrivmsg("#fbi", "{0}", ircserver);
-			sSendMessage.SendCMPrivmsg("#fbi", "{0}", message);
+			sSendMessage.SendCMPrivmsg("#fbi", "{0}", message.Length > 400 ? message.Substring(0, 400) + "..." : message);
 		}
 
 		public void SendPacketBack(SchumixPacket packet, NetworkStream stream, string hst, int backport)
