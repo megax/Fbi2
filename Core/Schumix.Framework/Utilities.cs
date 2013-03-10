@@ -795,7 +795,7 @@ namespace Schumix.Framework
 					pidfile = pidfile + ".pid";
 			}
 
-			pidfile = DirectoryToSpecial(LogConfig.LogDirectory, pidfile);
+			//pidfile = DirectoryToSpecial(LogConfig.LogDirectory, pidfile);
 			SchumixBase.PidFile = pidfile;
 			RemovePidFile();
 			CreateFile(pidfile);
