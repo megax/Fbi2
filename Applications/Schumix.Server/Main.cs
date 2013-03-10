@@ -63,8 +63,6 @@ namespace Schumix.Server
 				}
 			}
 
-			sUtilities.CreatePidFile("Tesztelek");
-
 			System.Console.Title = "FBI Test Cliens";
 			System.Console.ForegroundColor = ConsoleColor.Blue;
 			System.Console.WriteLine("[Cliens]");
