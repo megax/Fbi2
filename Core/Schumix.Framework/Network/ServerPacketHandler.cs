@@ -145,18 +145,16 @@ namespace Schumix.Framework.Client
 
 			var sSender = sIrcBase.Networks[ircserver].sSender;
 			var sSendMessage = sIrcBase.Networks[ircserver].sSendMessage;
-			sSendMessage.SendCMPrivmsg("#fbi", "{0}", project);
-			sSendMessage.SendCMPrivmsg("#fbi", "{0}", refname);
-			sSendMessage.SendCMPrivmsg("#fbi", "{0}", rev);
-			sSendMessage.SendCMPrivmsg("#fbi", "{0}", author);
-			sSendMessage.SendCMPrivmsg("#fbi", "{0}", url);
-			sSendMessage.SendCMPrivmsg("#fbi", "{0}", channels);
+			project = project.Replace(".git", string.Empty);
+			message = message.Length > 400 ? message.Substring(0, 400) + "..." : message;
 
 			foreach(var chan in channels.Split(SchumixBase.Comma))
+			{
 				sSender.Join(chan);
-
-			sSendMessage.SendCMPrivmsg("#fbi", "{0}", ircserver);
-			sSendMessage.SendCMPrivmsg("#fbi", "{0}", message.Length > 400 ? message.Substring(0, 400) + "..." : message);
+				sSendMessage.SendCMPrivmsg(chan, "[3{0}] {1} pushed new commit to 7{2}: 02{3}", project, author, refname, url);
+				sSendMessage.SendCMPrivmsg(chan, "3{0}15/7{1} 10{2} {3}: {4}", project, refname, rev, author, message);
+				Thread.Sleep(1000);
+			}
 		}
 
 		public void SendPacketBack(SchumixPacket packet, NetworkStream stream, string hst, int backport)
