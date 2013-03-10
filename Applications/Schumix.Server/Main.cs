@@ -143,9 +143,9 @@ namespace Schumix.Server
 			packet2.Write<string>(SchumixBase.GetGuid().ToString());
 			ClientSocket.SendPacketToSCS(packet2);
 			Thread.Sleep(1000);
-			Process.GetCurrentProcess().Kill();
-			//listener.Close();
-			//listener.Dispose();
+			listener.Close();
+			listener.Dispose();
+			Environment.Exit(0);
 			//Shutdown();
 		}
 
