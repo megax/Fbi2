@@ -144,8 +144,9 @@ namespace Schumix.Server
 				}
 				else if(arg.Contains("--message="))
 				{
-					if(arg.Substring(arg.IndexOf("--message=") + "--message=".Length) != string.Empty)
-						message = arg.Substring(arg.IndexOf("--message=") + "--message=".Length);
+					string mess = args.SplitToString(SchumixBase.Space);
+					if(mess.Substring(mess.IndexOf("--message=") + "--message=".Length) != string.Empty)
+						message = mess.Substring(mess.IndexOf("--message=") + "--message=".Length);
 
 					Console.WriteLine(message);
 					continue;
