@@ -116,7 +116,7 @@ namespace Schumix.Server
 			//System.Console.WriteLine();
 
 			//Log.Notice("Main", sLConsole.MainText("StartText3"));
-
+			
 			if(sUtilities.GetPlatformType() == PlatformType.Windows)
 				sWindows.Init();
 			else if(sUtilities.GetPlatformType() == PlatformType.Linux)
