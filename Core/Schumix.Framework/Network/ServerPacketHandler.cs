@@ -139,6 +139,7 @@ namespace Schumix.Framework.Client
 			string ircserver = pck.Read<string>();
 			string message = pck.Read<string>();
 
+			var sSender = sIrcBase.Networks["default"].sSender;
 			var sSendMessage = sIrcBase.Networks["default"].sSendMessage;
 			sSendMessage.SendCMPrivmsg("#fbi", "{0}", project);
 			sSendMessage.SendCMPrivmsg("#fbi", "{0}", refname);
@@ -146,6 +147,10 @@ namespace Schumix.Framework.Client
 			sSendMessage.SendCMPrivmsg("#fbi", "{0}", author);
 			sSendMessage.SendCMPrivmsg("#fbi", "{0}", url);
 			sSendMessage.SendCMPrivmsg("#fbi", "{0}", channels);
+
+			foreach(var chan in channels.Split(SchumixBase.Comma))
+				sSender.Join(chan);
+
 			sSendMessage.SendCMPrivmsg("#fbi", "{0}", ircserver);
 			sSendMessage.SendCMPrivmsg("#fbi", "{0}", message);
 		}
